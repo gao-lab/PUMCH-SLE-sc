@@ -1,0 +1,16 @@
+.ipynb_checkpoints
+.vscode
+.snakemake
+.virtual_documents
+.Rhistory
+.Rdata
+.png
+pdf
+.html
+
+__pycache__
+
+tmp
+source
+data
+output_file
