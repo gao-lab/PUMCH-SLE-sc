@@ -3,10 +3,11 @@
 .snakemake
 .virtual_documents
 .Rhistory
-.Rdata
-.png
-pdf
-.html
+*.Rdata
+*.Rds
+*.png
+*.pdf
+*.html
 
 __pycache__
 
