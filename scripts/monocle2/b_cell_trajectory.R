@@ -21,7 +21,7 @@ back_run(estimateSizeFactors,out_name = "cds", job_name = "estimateSizeFactors",
 cds <- detectGenes(cds, min_expr = 0.1)
 
 # deg <- marker_all_bcell_filter %>% group_by(cluster) %>% top_n(avg_log2FC, n = 10)
-# deg <- marker_all_bcell_filter %>% filter(avg_log2FC > 0.5 )
+# deg <- marker_all_bcell_filter %>% filter(avg_log2FC > 0.5)
 deg <- unique(marker_all_bcell_filter$gene)
 cds <- monocle::setOrderingFilter(cds, deg)
 
@@ -51,27 +51,27 @@ monocle::plot_cell_trajectory(cds, color_by = "Pseudotime")
 #-----------------------------  vis the genes ----------------------------------
 
 my_genes <- c("IGHD", "IGHG1", "VPREB3", "FCRL5", "ISG15")
-cds_subset <- cds[my_genes,]
+cds_subset <- cds[my_genes, ]
 plot_genes_in_pseudotime(cds_subset, color_by = "subtype")
 
 
 #-----------------------------  branch analysis ---------------------------------
 BEAM_res <- BEAM(cds, branch_point = 1, cores = 24)
-BEAM_res <- BEAM_res[order(BEAM_res$qval),]
+BEAM_res <- BEAM_res[order(BEAM_res$qval), ]
 BEAM_res <- BEAM_res[, c("gene_short_name", "pval", "qval")]
 BEAM_res <- BEAM_res %>% filter(!str_detect(gene_short_name, "^RP[LS]")) %>% 
     filter(!str_detect(gene_short_name, "^MT")) %>% 
     filter(!str_detect(gene_short_name, "^IG[KL]")) %>% 
     filter(!str_detect(gene_short_name, "^IGHV"))
 plot_genes_branched_heatmap(cds[c(row.names(subset(BEAM_res,
-                                                  qval < 1e-25)), "CD27", "IGHD", "IGHM"),],
+                                                  qval < 1e-25)), "CD27", "IGHD", "IGHM"), ],
                             branch_labels = c("B.mem.CD27-", "B.memory"),
                             branch_point = 1,
                             num_clusters = 4,
                             cores = 8,
                             use_gene_short_name = T,
                             show_rownames = T)
-plot_genes_branched_pseudotime(cds[c("CD27", "CD79A", "IGHG2", "IGHA1", "IGHD", "CD38", "FCRL5", "CXCR3", "CXCR4"),],
+plot_genes_branched_pseudotime(cds[c("CD27", "CD79A", "IGHG2", "IGHA1", "IGHD", "CD38", "FCRL5", "CXCR3", "CXCR4"), ],
                                branch_point = 1,branch_labels = c("B.mem.CD27-", "B.memory"),
                                color_by = "subtype",
                                ncol = 3)

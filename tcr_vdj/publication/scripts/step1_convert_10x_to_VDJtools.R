@@ -15,11 +15,11 @@ if (str_detect(snakemake@input[[1]], "TR")) {
     TRA <- read.csv(list.files(path = snakemake@output[[1]], pattern = "TRA", full.names = T), sep = "\t")
     TRB<- read.csv(list.files(path = snakemake@output[[1]], pattern = "TRB", full.names = T), sep = "\t")
 
-    TCR <- rbindlist(list(TRA,TRB))
+    TCR <- rbindlist(list(TRA, TRB))
     TCR <- dplyr::rename(TCR, count = X.Seq..Count, frequency = Percent, CDR3nt = N.Sequence,
-               CDR3aa = AA.Sequence, V = V.Segments, D = D.Segment, J = J.Segments)
+                        CDR3aa = AA.Sequence, V = V.Segments, D = D.Segment, J = J.Segments)
     out_path <-  paste0(snakemake@output[[1]], "/", sample, "_tcr.tsv")
     print(out_path)
     print(head(TCR))
-    write.table(TCR,file = out_path, sep = "\t", row.names = F, quote = F)
+    write.table(TCR, file = out_path, sep = "\t", row.names = F, quote = F)
 }

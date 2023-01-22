@@ -28,13 +28,13 @@ cellchat <- computeCommunProbPathway(cellchat)
 cellchat <- aggregateNet(cellchat)
 
 groupSize <- as.numeric(table(cellchat@idents))
-par(mfrow = c(1,2), xpd = TRUE)
+par(mfrow = c(1, 2), xpd = TRUE)
 netVisual_circle(cellchat@net$count, vertex.weight = groupSize, weight.scale = T, label.edge = F, title.name = "Number of interactions")
 netVisual_circle(cellchat@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge = F, title.name = "Interaction weights/strength")
 
 mat <- cellchat@net$weight
 heatmap(mat)
-par(mfrow = c(3,4), xpd = TRUE)
+par(mfrow = c(3, 4), xpd = TRUE)
 for (i in 1:nrow(mat)) {
   mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
   mat2[i, ] <- mat[i, ]
@@ -43,7 +43,7 @@ for (i in 1:nrow(mat)) {
 }
 
 mat <- cellchat@net$weight
-par(mfrow = c(3,4), xpd = TRUE)
+par(mfrow = c(3, 4), xpd = TRUE)
 for (i in 1:nrow(mat)) {
   mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
   mat2[i, ] <- mat[i, ]
@@ -51,10 +51,10 @@ for (i in 1:nrow(mat)) {
 }
 
 # ----------------------- show specific pathway  -------------------------------
-pathways.show <- c("MHC-I") # CXCL  BAFF IFN-II MHC-I
+pathways.show <- c("MHC-I") # CXCL BAFF IFN-II MHC-I
 # Hierarchy plot
-# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast and the right portion shows signaling to immune cells 
-vertex.receiver <- seq(1,4) # a numeric vector.
+# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast and the right portion shows signaling to immune cells
+vertex.receiver <- seq(1, 4) # a numeric vector.
 # netVisual_aggregate(cellchat, signaling = pathways.show, vertex.receiver = vertex.receiver, arrow.width = 0.1,arrow.size = 0.1, layout = "chord")
 par(mfrow = c(1, 1))
 netVisual_aggregate(cellchat, signaling = pathways.show,  vertex.receiver = vertex.receiver)
@@ -72,7 +72,7 @@ plotGeneExpression(cellchat, signaling = "MCH-I")
 
 
 # ----------------------------- Graph theory -----------------------------------
-cellchat <- netAnalysis_computeCentrality(cellchat, slot.name = "netP") 
+cellchat <- netAnalysis_computeCentrality(cellchat, slot.name = "netP")
 netAnalysis_signalingRole_network(cellchat, signaling = pathways.show, width = 8, height = 2.5, font.size = 10)
 gg1 <- netAnalysis_signalingRole_scatter(cellchat)
 gg2 <- netAnalysis_signalingRole_scatter(cellchat, signaling = c("CXCL", "CCL"))
@@ -87,7 +87,7 @@ ht <- netAnalysis_signalingRole_heatmap(cellchat, signaling = c("CXCL", "CCL"))
 library(NMF)
 library(ggalluvial)
 selectK(cellchat, pattern = "outgoing")
-nPatterns = 4
+nPatterns <- 4
 cellchat <- identifyCommunicationPatterns(cellchat, pattern = "outgoing", k = nPatterns)
 netAnalysis_dot(cellchat, pattern = "outgoing")
 

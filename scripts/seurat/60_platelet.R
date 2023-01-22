@@ -25,7 +25,7 @@ platelet_harmony <- platelet %>%
   FindClusters(resolution = 0.8) %>%
   identity()
 
-platelet_harmony <- subset(platelet_harmony, idents = c(8,9 ), invert =10)
+platelet_harmony <- subset(platelet_harmony, idents = c(8, 9), invert = 10)
 
 # save(platelet_harmony, file = paste0(output_path, "platelet_harmony_14iter.rdata"))
 
@@ -43,13 +43,13 @@ marker_all_platelet_filter %>% group_by(cluster) %>% top_n(avg_log2FC, n = 10) %
 VlnPlot(platelet_harmony, features = feats)
 
 FeaturePlot(platelet_harmony, features = c("CD58", "CD69", "IFITM1"), pt.size = 0.7,
-            cols = c("grey", "red"), ncol = 3) &NoAxes()
+            cols = c("grey", "red"), ncol = 3) & NoAxes()
 
 DotPlot2(platelet_harmony, marker_list  = c("CD58", "CD69", "IFITM1", "PRKRA"))
 DotPlot(platelet_harmony, features = c("CD58", "CD69", "IFITM1", "PRKRA"),
         group.by = "group")
 DotPlot2(platelet_harmony, marker_list = c("CD58", "CD69", "IFITM1"), group.by = "subtype")
-VlnPlot(platelet_harmony, features = c("CD58", "CD69", "IFITM1"), stack = T , group.by = "subtype")
+VlnPlot(platelet_harmony, features = c("CD58", "CD69", "IFITM1"), stack = T, group.by = "subtype")
 marker_platelet_slepah <- FindMarkers(platelet_harmony, group.by = "group",
                                       ident.1 = "SLE_pah")
 marker_platelet_slepah <- marker_platelet_slepah%>% filter(p_val_adj < 0.05)
@@ -66,7 +66,7 @@ platelet_harmony$subtype[which(platelet_harmony$seurat_clusters %in% c(1,7, 10))
 
 table(platelet_harmony$subtype)
 # pub
-DimPlot(platelet_harmony, group.by = "subtype", label = T, cols = get_color(2, set = "Set2",set_len = 2)) + NoAxes()
+DimPlot(platelet_harmony, group.by = "subtype", label = T, cols = get_color(2, set = "Set2", set_len = 2)) + NoAxes()
 
 
 #-------------------------- Compare at Sample Level ----------------------------
@@ -88,24 +88,24 @@ platelet_harmony@meta.data %>%
   left_join(platelet_harmony@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
   ggpubr::ggboxplot(x = "group", y = "Ratio", fill = "group",
                     palette = rev(c("#00AFBB", "#FC4E07"))) +
-  facet_wrap(~subtype , scales = "free") + stat_compare_means(method = "t.test", label.x = 1.4, label = "p.format")
+  facet_wrap(~subtype, scales = "free") + stat_compare_means(method = "t.test", label.x = 1.4, label = "p.format")
 
 # pub
 # Box plot :(paired)cell subtype ratio between treatment
 tmp1 <- platelet_harmony@meta.data  %>%
-  group_by(orig.ident, subtype,.drop = FALSE) %>% summarise(sub_num = n()) %>%
+  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(platelet_harmony@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
   filter(!pair == "unpaired") %>% filter(treatment == "treated") %>%
   filter(!orig.ident == "XYY2")  %>% filter(!subtype == "unknown")
 tmp2 <- platelet_harmony@meta.data  %>%
-  group_by(orig.ident, subtype,.drop = FALSE) %>% summarise(sub_num = n()) %>%
+  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(platelet_harmony@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
   filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>%
   filter(!orig.ident == "XYY2") %>% filter(!subtype == "unknown")
 data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype,
-           before = Tmp2$Ratio, after = Tmp1$Ratio ) %>%
+           before = Tmp2$Ratio, after = Tmp1$Ratio) %>%
   # mutate(across(subtype,factor, levels = c("B.transition", "B.naive", "B.IFN-response",
                                            # "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-"))) %>%
   ggpaired(cond1 = "before", cond2 = "after",

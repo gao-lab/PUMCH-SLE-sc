@@ -13,10 +13,10 @@ setwd(data.dir)
 load("../../seurat/pbmc/04-pbmc_all_anno_modify_meta.rdata")
 group_list <- SplitObject(pbmc_all, split.by = "treatment")
 rm(pbmc_all);gc()
-group_list <- lapply(group_list, function(x) 
+group_list <- lapply(group_list, function(x)
   createCellChat(object = x, group.by = "main_type", assay = "RNA"))
 # This step need about 30min and 100G MEM
-options(future.globals.maxSize = 8*1024^3)
+options(future.globals.maxSize = 8 * 1024 ^ 3)
 group_list <- mclapply(group_list, process_cellchat, mc.cores = mc)
 # not need anymore because we add this step to process_cellchat()
 group_list <- mclapply(group_list, function(x)
@@ -41,19 +41,19 @@ process_cellchat <- function(cellchat_obj, workers = 8) {
 }
 
 # ------------------------------------ Plot ------------------------------------
-gg1 <- compareInteractions(cellchat, show.legend = F, group = c(1,2,3))
-gg2 <- compareInteractions(cellchat, show.legend = F, group = c(1,2,3), measure = "weight",size.text  = 10)
+gg1 <- compareInteractions(cellchat, show.legend = F, group = c(1, 2, 3))
+gg2 <- compareInteractions(cellchat, show.legend = F, group = c(1, 2, 3), measure = "weight", size.text  = 10)
 gg1 + gg2
 gg2 + scale_fill_manual(values = c("#DA9494", "#9FB1D4", "#B4D493")) 
 
 # circle plot
-par(mfrow = c(1,3), xpd = TRUE)
-netVisual_diffInteraction(cellchat, comparison = c(1,3), weight.scale = T, arrow.size = 0.4,
+par(mfrow = c(1, 3), xpd = TRUE)
+netVisual_diffInteraction(cellchat, comparison = c(1, 3), weight.scale = T, arrow.size = 0.4,
                           title.name = "Untreated compare HC")
 netVisual_diffInteraction(cellchat, comparison = c(2, 1), weight.scale = T, arrow.size = 0.4,
                           title.name = "Treated compare Untreated")
-SnetVisual_diffInteraction(cellchat, comparison = c(1,2), weight.scale = T, arrow.size = 0.4)
-netVisual_diffInteraction(cellchat, comparison = c(2,3), weight.scale = T, arrow.size = 0.4)
+SnetVisual_diffInteraction(cellchat, comparison = c(1, 2), weight.scale = T, arrow.size = 0.4)
+netVisual_diffInteraction(cellchat, comparison = c(2, 3), weight.scale = T, arrow.size = 0.4)
 
 # heatmap
 gg1 <- netVisual_heatmap(cellchat, comparison = c(1, 3))
@@ -73,7 +73,7 @@ netAnalysis_contribution(group_list[[2]], signaling = "CCL", return.data = T, fo
 
 netVisual_bubble(cellchat, sources.use = 2, targets.use = c(5:11),  comparison = c(1, 3), angle.x = 45)
 
-features.name = "untreated"; pos.dataset = "untreated"
+features.name <- "untreated"; pos.dataset <- "untreated"
 plan("sequential")
 cellchat <- identifyOverExpressedGenes(cellchat, group.dataset = "datasets",
                                        pos.dataset = pos.dataset, features.name = features.name,
@@ -84,7 +84,7 @@ net.down <- subsetCommunication(cellchat, net = net, datasets = "untreated", lig
 gene.up <- extractGeneSubsetFromPair(net.up, cellchat)
 gene.down <- extractGeneSubsetFromPair(net.down, cellchat)
 pairLR.use.up <- net.up[, "interaction_name", drop = F]
-netVisual_bubble(cellchat, pairLR.use = pairLR.use.up, sources.use = 4, targets.use = c(5:11), 
+netVisual_bubble(cellchat, pairLR.use = pairLR.use.up, sources.use = 4, targets.use = c(5:11),
                         comparison = c(1, 3), angle.x = 90, remove.isolate = T,
                         title.name = paste0("Up-regulated signaling in Untreated"))
 
@@ -97,7 +97,7 @@ netVisual_bubble(cellchat, pairLR.use = pairLR.use.up, sources.use = 4, targets.
 pathways.show <- c("CCL")
 # debugonce(getMaxWeight)
 weight.max <- getMaxWeight(group_list[1:2], slot.name = c("netP"), attribute = pathways.show) # control the edge weights across different datasets
-par(mfrow = c(1,2), xpd = TRUE)
+par(mfrow = c(1, 2), xpd = TRUE)
 for (i in 1:length(group_list[1:2])) {
   netVisual_aggregate(group_list[[i]], signaling = pathways.show, layout = "circle", edge.weight.max = weight.max[1],
   edge.width.max = 10, signaling.name = paste(pathways.show, names(group_list)[i]))

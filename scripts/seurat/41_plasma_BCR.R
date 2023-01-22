@@ -45,16 +45,16 @@ ggboxplot(bcr_plasma@meta.data, x = "disease", y = "Frequency", fill = "disease"
 # remove Freq =1 (abandon)
 bcr_plasma@meta.data %>% filter(Frequency > 1) %>%
 ggboxplot(, x = "disease", y = "Frequency", fill = "disease") +
-    ylim(c(0,20)) + xlab("") + ylab("Plasma clone type distribution") +
+    ylim(c(0, 20)) + xlab("") + ylab("Plasma clone type distribution") +
     stat_compare_means(comparisons =  list(c("SLE", "HC")),  method = "wilcox.test",
                        label.y = 18, bracket.size = 0.5)
 
 
 # before and after treatment
 bcr_plasma@meta.data %>% filter(!treatment == "HC") %>% group_by(orig.ident) %>%
-    # mutate(cell_num = n()) %>% mutate(clone_num = cell_num * Frequency )
-ggboxplot(x = "treatment",y = "Frequency",fill = "treatment") +
-    ylim(c(0,20)) +
+    # mutate(cell_num = n()) %>% mutate(clone_num = cell_num * Frequency)
+ggboxplot(x = "treatment", y = "Frequency", fill = "treatment") +
+    ylim(c(0, 20)) +
     xlab("") + ylab("Plasma clone type distribution") +
     stat_compare_means(comparisons =  list(c("untreated", "treated")), method = "wilcox.test",
                         label.y = 18, bracket.size = 0.5)

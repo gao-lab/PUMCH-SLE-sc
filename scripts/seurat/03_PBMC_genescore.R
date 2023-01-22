@@ -33,7 +33,7 @@ pbmc_final@meta.data %>%
     spread(treatment, mean_IFN) %>%
     mutate(treated_HC = 2^(treated)-2^(HC), untreated_HC = 2^(untreated)-2^(HC), untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
-    # select(1,2,3) %>%
+    # select(1, 2, 3) %>%
     select(5,4) %>%
     pheatmap(scale = "none", cluster_rows = F, cluster_cols = F,
             color = c(colorRampPalette(colors = c("blue", "white"))(25),
@@ -66,7 +66,7 @@ pbmc_final@meta.data %>%
                                           untreated_HC = 2^(untreated)-2^(HC) ,
                                           untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
-    # select(1,2,3) %>%
+    # select(1, 2, 3) %>%
     select(5, 4) %>%
     pheatmap(scale = "none", cluster_rows = F, cluster_cols = F,
             color = c(colorRampPalette(colors = c("blue", "white"))(7),
@@ -89,7 +89,7 @@ pbmc_final@meta.data %>%
     spread(treatment, mean_mTOR) %>%
     mutate(treated_HC = 2^(treated)-2^(HC), untreated_HC = 2^(untreated)-2^(HC), untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
-    # select(1,2,3) %>%
+    # select(1, 2, 3) %>%
     dplyr::select(5,4) %>%
     pheatmap(scale = "none", cluster_rows = F, cluster_cols = F,
             color = c(colorRampPalette(colors = c("blue", "white"))(10),

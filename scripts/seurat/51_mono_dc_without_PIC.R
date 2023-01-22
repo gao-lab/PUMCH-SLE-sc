@@ -71,7 +71,7 @@ mono_dc_filter@meta.data %>% filter(group != "pSS_pah") %>%
   group_by(orig.ident, subtype) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(mono_dc_filter@meta.data[, c(1, 12, 13, 14, 18)]  %>%  distinct()) %>%
-  filter(!treatment== "treated") %>%
+  filter(!treatment == "treated") %>%
   ggpubr::ggboxplot(x = "disease", y = "Ratio", fill = "disease",
                     palette = c("#FC4E07", "#00AFBB")) +
   facet_wrap(~subtype, scales = "free") + stat_compare_means(method = "t.test", label.x = 1.2)
@@ -90,15 +90,11 @@ tmp2 <- mono_dc_filter@meta.data %>% filter(group != "pSS_pah") %>%
   filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>%
   filter(!orig.ident == "XYY2")
 mono_pair_df <- data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype,
-                             before = Tmp2$Ratio, after = Tmp1$Ratio )
+                             before = Tmp2$Ratio, after = Tmp1$Ratio)
 ggpaired(mono_pair_df, cond1 = "before", cond2 = "after",
          fill  = "condition", line.color = "gray", line.size = 0.4,
          palette = "npg") +  stat_compare_means(paired = TRUE, method = "t.test", label.x = 1.4) +
   ylab("Prolife Plasma ratio") + facet_wrap(~subtype, scales = "free")
-
-
-#------------------------------- Marker genes-----------------------------------
-# marker_DC_pDC <- Find
 
 
 #---------------------------------- Save ---------------------------------------

@@ -10,7 +10,7 @@ bcr_df <- rbindlist(combined_bcr)
 #                             cloneCall = "aa", group.by = "sample", proportion = FALSE,
 #                             cloneTypes = c(Single = 1, Small = 5, Medium = 20, Large = 100, Hyperexpanded = 500))
 scRepertoire_barcode <- bcell_filter@meta.data %>% rownames_to_column("barcode") %>%
-    mutate(new_barcode = str_split_fixed(barcode , "_",2)[, 1]) %>%
+    mutate(new_barcode = str_split_fixed(barcode , "_", 2)[, 1]) %>%
     mutate(scRepertoire = paste0(orig.ident, "_", group, "_", new_barcode)) %>% select(scRepertoire)
 
 bcell_filter <- RenameCells(bcell_filter, new.names = scRepertoire_barcode$scRepertoire)
@@ -56,7 +56,7 @@ clonalOverlap(treat_bcr, cloneCall = "gene+nt", method = "jaccard") +
 
 
 # -------------------------- VDJ connection preference -------------------------
-tmp <- bcr_df_filter[(grepl("IGHV3-23",bcr_df_filter$IGH) + grepl("IGHJ4",bcr_df_filter$IGH)) == 2,]
+tmp <- bcr_df_filter[(grepl("IGHV3-23",bcr_df_filter$IGH) + grepl("IGHJ4",bcr_df_filter$IGH)) == 2, ]
 table(tmp$sample)
 rm(tmp)
 bcr_df_filter.list <- split(bcr_df_filter, f =   bcr_df_filter$sample)
@@ -129,7 +129,7 @@ for (paired_sample in paired_samples) {
         (tmp[[paired_sample]] <2 & tmp[[paired_sample2]] >1) %>% sum()
     expand_shared <-  (tmp[[paired_sample]] >1 & tmp[[paired_sample2]] >1) %>% sum()
     plot_df <- data.frame(matrix(NA, ncol = 2, nrow = 2,dimnames = list(c("unexpand", "expand"), c("unshare", "share"))))
-    plot_df[1,] <- c(single_not_shared,single_shared);plot_df[2,] <- c(expand_not_shared,expand_shared)
+    plot_df[1, ] <- c(single_not_shared,single_shared);plot_df[2, ] <- c(expand_not_shared,expand_shared)
     plot<- plot_df %>% as.matrix() %>% reshape2::melt() %>%
         ggplot(aes(x = Var1, y = Var2, fill = value),) +   geom_tile() + 
         geom_text(aes(Var1, Var2, label = value), color = "black", size = 4) +

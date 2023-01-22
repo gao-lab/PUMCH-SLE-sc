@@ -18,7 +18,7 @@ setwd("/data/sle")
 source("./scripts/function_R/utils.R")
 
 
-# read in the final version of the subtype annotation file 
+# read in the final version of the subtype annotation file
 load("./final/seurat/t_cell/04-t_cell_merge.rdata")  # t_cell_merge
 load("./final/seurat/t_cell/04-CD4_Tcell_filter_anno.rdata")  # cd4_filter
 load("./final/seurat/t_cell/04-CD8_Tcell_filter_anno.rdata")  # cd8_filter
@@ -33,7 +33,7 @@ load("./final/seurat/plasma/03-plasma_anno_filter_No_harm.rdata") # plasma_filte
 # --------------------------- Filter and Harmony -------------------------------
 pbmc_all <- merge(t_cell_merge, y = c(mono_dc_filter, bcell_filter,
                                      platelet_filter, plasma_filter),
-                    merge.data = F,merge.dr = F)
+                    merge.data = F, merge.dr = F)
 # exclude the pSS_pah sample
 Idents(pbmc_all) <- "orig.ident"
 

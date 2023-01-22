@@ -4,16 +4,16 @@ library(magrittr)
 library(ggpubr)
 
 meta <- read.csv("./vdj/VDJtools/all_sample_meta.csv", header = T)
-files <- list.files("./vdj/VDJtools/bcr_data/",pattern = "csv$")
+files <- list.files("./vdj/VDJtools/bcr_data/", pattern = "csv$")
 HC_list <- data.frame(matrix(NA, ncol = 18, nrow = 0))
 SLE_list <- data.frame(matrix(NA, ncol = 18, nrow = 0))
 for (file in files) {
-    name = str_split(file, "_")[[1]][1]
+    name <- str_split(file, "_")[[1]][1]
     # assign(name, read.csv(paste0("./vdj/VDJtools/bcr_data/",file),header = T))
     tmp <-  read.csv(paste0("./vdj/VDJtools/bcr_data/", file), header = T)
     # get(name) %<>% mutate(sample = name)
     # tmp %<>% mutate(sample = name)
-    if (meta$group[which(meta$name == name)] == "HC" ) {
+    if (meta$group[which(meta$name == name)] == "HC") {
         HC_list <- rbind(HC_list,tmp)
     }else if (meta$group[which(meta$name == name)] == "SLE") {
         SLE_list <- rbind(SLE_list, tmp)
@@ -96,32 +96,32 @@ HC_ig.df <- HC_IgClass %>% group_by(sample) %>% count(c_gene, sample) %>%
 ggplot(HC_ig.df, aes(x = sample, y = n, fill = c_gene)) +
     geom_bar(stat = "identity", position = "fill") + labs(y = "proportions", x = "") +
     # scale_fill_discrete(names(table(Ig_ratio$c_gene))) +
-    # scale_fill_manual("legend", values = ) +  # change the color
+    # scale_fill_manual("legend", values =) +  # change the color
     labs(fill = "IG class")
 
 SLE_ig.df <- SLE_IgClass %>% group_by(sample) %>% count(c_gene, sample) %>%
     filter(str_detect(c_gene, "^IGH")) %>% group_by(sample) %>% mutate(ratio = n / sum(n)  * 100)
 
-ggplot(SLE_ig.df,aes(x = sample, y = n, fill = c_gene)) +
+ggplot(SLE_ig.df, aes(x = sample, y = n, fill = c_gene)) +
     geom_bar(stat = "identity", position = "fill") + labs(y = "proportions", x = "") +
     # scale_fill_discrete(names(table(Ig_ratio$c_gene))) +
-    # scale_fill_manual("legend", values = ) +  # change the color
+    # scale_fill_manual("legend", values =) +  # change the color
     labs(fill = "IG class")
 
-rbind(HC_ig.df,SLE_ig.df) %>% ggplot(aes(x = sample, y = n, fill = c_gene)) +
+rbind(HC_ig.df, SLE_ig.df) %>% ggplot(aes(x = sample, y = n, fill = c_gene)) +
     geom_bar(stat = "identity", position = "fill") + labs(y = "proportions", x = "") +
     # scale_fill_discrete(names(table(Ig_ratio$c_gene))) +
-    # scale_fill_manual("legend", values = ) +  # change the color
+    # scale_fill_manual("legend", values =) +  # change the color
     labs(fill = "IG class")
 
-ggplot(rbind(HC_ig.df,SLE_ig.df), aes(x = c_gene, y = sample)) + geom_tile(aes(fill = ratio)) +
+ggplot(rbind(HC_ig.df, SLE_ig.df), aes(x = c_gene, y = sample)) + geom_tile(aes(fill = ratio)) +
     scale_fill_gradient(low = "white", high = "red") + xlab("samples") +
     theme_bw() + theme(panel.grid.major = element_blank()) + theme(legend.key = element_blank())
 
 all_ig.mat <- rbind(HC_ig.df, SLE_ig.df) %>% select(-n) %>% spread(c_gene, ratio, fill = 0) %>%
     column_to_rownames("sample")
     # left_join(meta)
-heatmap(all_ig.mat %>% as.matrix(),scale = "column")
+heatmap(all_ig.mat %>% as.matrix(), scale = "column")
 
 
 all_ig.df <-rbind(HC_ig.df, SLE_ig.df) %>% left_join(meta, by = c("sample" = "name")) %>%

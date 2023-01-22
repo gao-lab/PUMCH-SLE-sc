@@ -808,7 +808,7 @@ local({
     text <- paste(text %||% read(file), collapse = "\n")
   
     # find strings in the JSON
-    pattern <- '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+    pattern <- '["](?:(?:\\\\.)|(?:[^"\\\\])) *?["]'
     locs <- gregexpr(pattern, text, perl = TRUE)[[1]]
   
     # if any are found, replace them with placeholders

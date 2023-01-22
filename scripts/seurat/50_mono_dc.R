@@ -56,7 +56,7 @@ ggplot() + geom_bar(mapping = aes(x = Var1 , y = Ratio, fill = Var2),
            stat = "identity",
            position = "dodge")
 table(mono_dc_filter$seurat_clusters, mono_dc_filter$treatment) %>%
-  as.data.frame()  %>%group_by(Var2) %>%
+  as.data.frame() %>%group_by(Var2) %>%
   mutate(Frequency = sum(Freq)) %>% mutate(Ratio = Freq/Frequency*100) %>%
   ggplot() + geom_bar(mapping = aes(x = Var1, y = Ratio, fill = Var2),
                       stat = "identity",

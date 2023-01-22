@@ -60,8 +60,8 @@ clonalDiversity(combined_bcr, cloneCall = "aa", group.by = "sample",
 
 
 
-vizGenes(combined_bcr[c(9, 18, 19,22)], gene = "V", chain = "IGH",
+vizGenes(combined_bcr[c(9, 18, 19, 22)], gene = "V", chain = "IGH",
         y.axis = "J", plot = "heatmap", scale = TRUE, order = "gene")
 
-vizGenes(combined_bcr[-c(9, 18, 19,22)], gene = "V", chain = "IGH",
+vizGenes(combined_bcr[-c(9, 18, 19, 22)], gene = "V", chain = "IGH",
         y.axis = "J", plot = "heatmap", scale = TRUE, order = "gene")

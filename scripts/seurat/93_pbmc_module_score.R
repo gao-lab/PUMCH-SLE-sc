@@ -14,7 +14,7 @@ IFN_df <- pbmc_all@meta.data %>% select(group, main_type, treatment, IFN_score1,
 # res <- wilcox.test(IFN_score1 ~ group, data = IFN_df,
 #                    exact = FALSE)
 IFN_count <- IFN_df %>% select(IFN_score1)
-IFN_count$IFN_score1 <- (IFN_count$IFN_score1 - mean(IFN_count$IFN_score1))/sd(IFN_count$IFN_score1)
+IFN_count$IFN_score1 <- (IFN_count$IFN_score1 - mean(IFN_count$IFN_score1)) / sd(IFN_count$IFN_score1)
 IFN_seu <- CreateSeuratObject(as.data.frame(t(as.matrix(IFN_count))), meta.data = IFN_df)
 Idents(IFN_seu) <- "treatment"
 FindMarkers(IFN_seu, ident.1 = "untreated", ident.2 = "HC", logfc.threshold = 0, min.cells.feature = 1)
@@ -59,7 +59,7 @@ IFN_df.2 <- pbmc_all@meta.data %>% select(group, subtype, treatment, IFN_score1,
 # res <- wilcox.test(IFN_score1 ~ group, data = IFN_df.2,
 #                    exact = FALSE)
 IFN_count.2 <- IFN_df.2 %>% select(IFN_score1)
-IFN_count.2$IFN_score1 <- (IFN_count.2$IFN_score1 - mean(IFN_count.2$IFN_score1))/sd(IFN_count.2$IFN_score1)
+IFN_count.2$IFN_score1 <- (IFN_count.2$IFN_score1 - mean(IFN_count.2$IFN_score1)) / sd(IFN_count.2$IFN_score1)
 IFN_seu.2 <- CreateSeuratObject(as.data.frame(t(as.matrix(IFN_count.2))), meta.data = IFN_df.2)
 Idents(IFN_seu.2) <- "treatment"
 # FindMarkers(IFN_seu.2, ident.1 = "untreated", ident.2 = "HC", logfc.threshold = 0, min.cells.feature = 1)
@@ -77,8 +77,8 @@ for (cell_type in unique(IFN_seu.2$subtype)) {
                         min.cells.feature = 0, min.pct = 0, min.diff.pct = 0)
     rownames(tmp1) <- paste0(cell_type, "_untreated")
     rownames(tmp2) <- paste0(cell_type, "_treated")
-    IFN_logFC_df.2 <- rbind(IFN_logFC_df.2,tmp1)
-    IFN_logFC_df.2 <- rbind(IFN_logFC_df.2,tmp2)
+    IFN_logFC_df.2 <- rbind(IFN_logFC_df.2, tmp1)
+    IFN_logFC_df.2 <- rbind(IFN_logFC_df.2, tmp2)
 }
 
 IFN_logFC_df.2.new <- IFN_logFC_df.2 %>% rownames_to_column(var = "cell_type") %>%

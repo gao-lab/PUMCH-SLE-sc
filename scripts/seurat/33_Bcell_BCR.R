@@ -26,7 +26,7 @@ slot(bcr_bcell, "meta.data")$cloneType <- factor(slot(bcr_bcell, "meta.data")$cl
                                                             "Medium (10 < X <= 20)",
                                                             "Small (1 < X <= 10)",
                                                             "Single (0 < X <= 1)", NA))
-DimPlot(bcr_bcell, group.by = "cloneType",split.by = "treatment",pt.size = 0.4) +
+DimPlot(bcr_bcell, group.by = "cloneType", split.by = "treatment", pt.size = 0.4) +
     # plot_scdata(bcr_bcell, color_by = "cloneType", split_by = "treatment") +
     scale_color_manual(values = c("#B22222", "#FF8C00", "#FFDAB9", "#FDF5E6", "#F5F5F5"), na.value = "#F5F5F5") + NoAxes()
 
@@ -39,9 +39,9 @@ ggboxplot(bcr_bcell@meta.data, x = "disease", y = "Frequency", fill = "disease")
 
 # before and after treatment
 bcr_bcell@meta.data %>% filter(!treatment == "HC") %>% group_by(orig.ident) %>%
-    # mutate(cell_num = n()) %>% mutate(clone_num = cell_num * Frequency )
+    # mutate(cell_num = n()) %>% mutate(clone_num = cell_num * Frequency)
     ggboxplot(x = "treatment", y = "Frequency", fill = "treatment") +
-    ylim(c(0,60)) +
+    ylim(c(0, 60)) +
     xlab("") + ylab("Plasma clone type distribution") +
     stat_compare_means(comparisons =  list(c("untreated", "treated")), method = "wilcox.test",
                         label.y = 58, bracket.size = 0.5)

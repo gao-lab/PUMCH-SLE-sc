@@ -1,7 +1,7 @@
 import snakemake
 import pandas as pd
 
-# README 
+# README
 # VDJ tools for TCR or BCR
 # input: only need 10x cellranger filter_contig.csv(which has been renamed by sample)
 
@@ -31,8 +31,7 @@ rule all:
         expand("cluster_sample.hc.aa.{method}.pdf", method= OVERLAP_METHOD),# STEP6
         expand("cluster_sample.mds.aa.{method}.pdf", method= OVERLAP_METHOD), # STEP6
         expand("cluster_sample.perms.aa.{method}.pdf", method= OVERLAP_METHOD)
-         
-        
+
 # STEP1: convert 10x cellranger format to vdjtools format(single chain mode) √
 rule convert_10x_to_VDJtools:
     input:
@@ -42,8 +41,8 @@ rule convert_10x_to_VDJtools:
         vdj_file = "./out/vdj_format/{sample}/tcr_vdjtools.tsv"
     script:
         "script/step1_convert_10x_to_VDJtools.R"
-        
-        
+
+
 # STEP2:(need STEP1) vdj tools analysis basic: whole
 rule vdjtools_basic_whole:
     input:
@@ -62,7 +61,7 @@ rule vdjtools_basic_whole:
         java -jar ./vdjtools/vdjtools-1.2.1.jar CalcBasicStats -m {input.meta_path} {params.prefix} 
         java -jar ./vdjtools/vdjtools-1.2.1.jar CalcSegmentUsage -p -m {input.meta_path} -f group -l name {params.prefix}
         """
-        
+
 # STEP3:(need STEP1) vdj tools analysis basic: single sample 
 # LL2 MXY LAY failed for some reaeson
 rule vdjtools_basic_single:
@@ -83,7 +82,7 @@ rule vdjtools_basic_single:
         java -jar ./vdjtools/vdjtools-1.2.1.jar PlotFancyVJUsage  {input.vdj_file}  {wildcards.sample}_tcr
         """
 
-# STEP4:(need STEP1) vdj tools compare paird samples 
+# STEP4:(need STEP1) vdj tools compare paird samples
 rule compare_share:
     input:
         vdj_file_before =  "./out/vdj_format/{before}/tcr_vdjtools.tsv",
@@ -94,10 +93,10 @@ rule compare_share:
         # before and after can not have same name(even in different dir)
         # rm {input.vdj_file_before}_tmp
         '''
-         cp {input.vdj_file_before} ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv
-         java -jar ./vdjtools/vdjtools-1.2.1.jar OverlapPair -p -i aa  ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv {input.vdj_file_after} {wildcards.before}_{wildcards.after}
+        cp {input.vdj_file_before} ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv
+        java -jar ./vdjtools/vdjtools-1.2.1.jar OverlapPair -p -i aa  ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv {input.vdj_file_after} {wildcards.before}_{wildcards.after}
 
-         rm ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv
+        rm ./out/vdj_format/{wildcards.before}/{wildcards.before}_tcr_vdjtools.tsv
         '''
         
 # STEP5:(need STEP1) vdj tools pairwise distances

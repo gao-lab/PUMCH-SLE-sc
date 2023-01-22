@@ -159,7 +159,7 @@ int_fname <- system.file("extdata", "interactions.tsv", package = "CEMiTool")
 int_df <- read.delim(int_fname)
 # use SCENIC
 # int_df <- read_csv("./scripts/SCENIC/pDC/pdc_high_confidence_regulate.csv",col_names = T)
-# int_df <- int_df[, c(2,3)]
+# int_df <- int_df[, c(2, 3)]
 
 sample_annot <- data.frame(matrix(data = NA, ncol = 2, nrow = 430))
 colnames(sample_annot) <- c("SampleName", "Class")
@@ -183,7 +183,7 @@ links <- int_df[, -1]
 nodes <- rbind(data.frame(gene = unique(links$TF), attr = rep("TF", length(unique(links$TF)))),
               data.frame(gene = unique(links$target), attr = rep("target", length(unique(links$target))))
               )
-nodes <- nodes[!duplicated(nodes[, 1]),]
+nodes <- nodes[!duplicated(nodes[, 1]), ]
 net <- graph_from_data_frame(d = links, vertices = nodes, directed = T)
 net <- simplify(net, remove.multiple = F, remove.loops = T)
 l <- layout_with_fr(net)

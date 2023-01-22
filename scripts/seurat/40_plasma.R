@@ -1,5 +1,4 @@
 # plasma
-
 setwd("/data/sle")
 source("./scripts/function_R/utils.R")
 
@@ -24,14 +23,14 @@ back_run(do_seurat, out_name = "plasma_filter", job_name = "plasma_filter",
          plasma_filter, res = c(0.2, 0.3, 0.5, 0.6, 0.4))
 DotPlot2(plasma_filter, marker_list = b_marker_list)
 
-plasma_filter <- subset(plasma_filter, idents = c(5 ,6), invert = T)
+plasma_filter <- subset(plasma_filter, idents = c(5, 6), invert = T)
 DimPlot(plasma, group.by = "orig.ident") + DimPlot(plasma, label = T)
 
 #----------------------------- Compare key genes -------------------------------
 VlnPlot(plasma_filter, stack = T,
-        features = grep(rownames(plasma), pattern = "^IGH[AEGDM]",value = T))
+        features = grep(rownames(plasma), pattern = "^IGH[AEGDM]", value = T))
 DotPlot2(plasma_filter, group.by = "treatment",
-         marker_list = grep(rownames(plasma), pattern = "^IGH[AEGDM]",value = T))
+         marker_list = grep(rownames(plasma), pattern = "^IGH[AEGDM]", value = T))
 DotPlot2(plasma_filter, group.by = "RNA_snn_res.0.3", marker_list = b_marker_list)
 VlnPlot(plasma_filter, features = feats)
 # IFN related
@@ -51,7 +50,7 @@ seu_plot_heatmap(plasma_filter, marker_all_plasma, n = 5,
 plasma_filter$subtype <- "plasma"
 plasma_filter$subtype[which(plasma_filter$seurat_clusters == c(0))] <- "plasmablast"
 plasma_filter$subtype[which(plasma_filter$seurat_clusters == c(1))] <- "plasma.IgA"
-plasma_filter$subtype[which(plasma_filter$seurat_clusters == c(2,3))] <- "plasma"
+plasma_filter$subtype[which(plasma_filter$seurat_clusters == c(2, 3))] <- "plasma"
 plasma_filter$subtype[which(plasma_filter$seurat_clusters == c(4))] <- "plasma.IgG"
 table(plasma_filter$subtype)
 DimPlot(plasma_filter, group.by = "subtype",cols = get_color(len = 4, set = "Set1",set_len = 4)) & NoAxes()
@@ -78,63 +77,63 @@ seu_plot_heatmap(plasma_filter, marker_plasma_filter_subtype,
 # ------------------------ Ratio of Plasma -------------------------------------
 # Boxplot: plasma/pbmc ratio
 my_comparisons <- list(c("SLE", "HC"))
-as.data.frame((table(plasma_filter$orig.ident)/table(all_cell$orig.ident))* 100) %>%
+as.data.frame((table(plasma_filter$orig.ident) / table(all_cell$orig.ident)) * 100) %>%
     rename(orig.ident = Var1) %>%
     left_join(plasma_filter@meta.data[c("orig.ident", "group", "treatment", "pair")]) %>%
     unique() %>%
     # filter(!treatment == "treated") %>%
-    ggboxplot(x = "group",y = "Freq", fill = "group",
+    ggboxplot(x = "group", y = "Freq", fill = "group",
               palette  = c("#00AFBB", "#E7B800", "#FC4E07"), add = "jitter") +
-    stat_compare_means(comparisons = my_comparisons ,method = "t.test") + ylab("Plasma / PBMC (%)")
+    stat_compare_means(comparisons = my_comparisons, method = "t.test") + ylab("Plasma / PBMC (%)")
 
-# Boxplot: plasmablast/pbmc ratio (only before treatment )
+# Boxplot: plasmablast/pbmc ratio (only before treatment)
 plasmablast_meta <- plasma_filter@meta.data %>% filter(subtype == "plasmablast")
-as.data.frame((table(plasmablast_meta$orig.ident)/table(pbmc_all$orig.ident))* 100) %>%
-    data.frame() %>% rename(orig.ident = Var1 ) %>%
+as.data.frame((table(plasmablast_meta$orig.ident) / table(pbmc_all$orig.ident)) * 100) %>%
+    data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasmablast_meta[c("orig.ident", "group", "treatment", "pair")]) %>%
-    unique()  %>% mutate(oppo = 100-Freq) %>%
+    unique() %>% mutate(oppo = 100 - Freq) %>%
     # filter(!treatment == "treated") %>%
-    ggboxplot(x = "group", y = "Freq",fill = "group",
+    ggboxplot(x = "group", y = "Freq", fill = "group",
               palette  = c("#00AFBB", "#E7B800", "#FC4E07"), add = "jitter") + ylab("Plasmablast / PBMC (%)") +
     stat_compare_means(label.x = 1.5)
 
-# Boxplot: plasmablast/plasma ratio (only before treatment )
-as.data.frame((table(plasmablast_meta$orig.ident)/table(plasma_filter$orig.ident))* 100) %>%
-    data.frame() %>% rename(orig.ident = Var1 ) %>%
+# Boxplot: plasmablast/plasma ratio (only before treatment)
+as.data.frame((table(plasmablast_meta$orig.ident) / table(plasma_filter$orig.ident)) * 100) %>%
+    data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasmablast_meta[c("orig.ident", "group", "treatment", "pair")]) %>%
-    unique()  %>% mutate(oppo = 100-Freq) %>%
+    unique() %>% mutate(oppo = 100 - Freq) %>%
     # filter(!treatment == "treated") %>%
     ggboxplot(x = "group", y = "Freq", fill = "group",
               palette  = c("#00AFBB", "#E7B800", "#FC4E07"), add = "jitter") + ylab("Plasmablast / PBMC (%)") +
     stat_compare_means(comparisons = my_comparisons,  method = "t.test")
 
 # Boxplot: (paired)plasmablast/plasma ratio
-tmp1 <- (table(plasmablast_meta$orig.ident)/table(plasma_filter$orig.ident) * 100) %>%
+tmp1 <- (table(plasmablast_meta$orig.ident) / table(plasma_filter$orig.ident) * 100) %>%
     data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasma_filter@meta.data[c("orig.ident", "group", "treatment", "pair")]) %>%
     unique() %>% filter(!pair == "unpaired") %>% filter(treatment == "treated") %>%
     filter(!orig.ident == "XYY2")
-tmp2 <- (table(plasmablast_meta$orig.ident)/table(plasma_filter$orig.ident) * 100) %>%
-    data.frame() %>% rename(orig.ident = Var1 ) %>%
+tmp2 <- (table(plasmablast_meta$orig.ident) / table(plasma_filter$orig.ident) * 100) %>%
+    data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasma_filter@meta.data[c("orig.ident", "group", "treatment", "pair")]) %>%
     unique() %>% filter(!pair == "unpaired") %>% filter(treatment == "untreated")
-data.frame(sample = tmp1$orig.ident, before = tmp2$Freq, after = tmp1$Freq ) %>%
+data.frame(sample = tmp1$orig.ident, before = tmp2$Freq, after = tmp1$Freq) %>%
     ggpaired(cond1 = "before", cond2 = "after",
              fill  = "condition", line.color = "gray", line.size = 0.4,
              palette = "npg") +  stat_compare_means(paired = TRUE, method = "t.test", label.x = 1.4) +
         ylab("Plasmablast / Plasma (%)")
-   
+
 # Boxplot: (paired)plasmablast/pbmc ratio
-tmp1 <- (table(plasmablast_meta$orig.ident)/table(pbmc_all$orig.ident) * 100) %>%
-    data.frame() %>% rename(orig.ident = Var1 ) %>%
+tmp1 <- (table(plasmablast_meta$orig.ident) / table(pbmc_all$orig.ident) * 100) %>%
+    data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasma_filter@meta.data[c("orig.ident", "group", "treatment", "pair")]) %>%
     unique() %>% filter(!pair == "unpaired") %>% filter(treatment == "treated") %>%
     filter(!orig.ident == "XYY2")
-tmp2 <- (table(plasmablast_meta$orig.ident)/table(pbmc_all$orig.ident) * 100) %>%
-    data.frame() %>% rename(orig.ident = Var1 ) %>%
+tmp2 <- (table(plasmablast_meta$orig.ident) / table(pbmc_all$orig.ident) * 100) %>%
+    data.frame() %>% rename(orig.ident = Var1) %>%
     left_join(plasma_filter@meta.data[c("orig.ident", "group", "treatment", "pair")]) %>%
     unique() %>% filter(!pair == "unpaired") %>% filter(treatment == "untreated")
-data.frame(sample = tmp1$orig.ident, before = Tmp2$Freq, after = Tmp1$Freq ) %>%
+data.frame(sample = tmp1$orig.ident, before = Tmp2$Freq, after = Tmp1$Freq) %>%
     ggpaired(cond1 = "before", cond2 = "after",
              fill  = "condition", line.color = "gray", line.size = 0.4,
              palette = "npg") +  stat_compare_means(paired = TRUE, method = "t.test", label.x = 1.4) +
@@ -161,7 +160,7 @@ plot_all_cluster_go(marker_plasma_filter_disease, org = "human", ont = "BP")
 Idents(plasma_filter) <- "treatment"
 marker_plasma_filter_treatment <- FindAllMarkers(plasma_filter, logfc.threshold = 0.25,
                                                 min.pct = 0.2, min.diff.pct = 0.1, only.pos = T)
-seu_plot_heatmap(plasma_filter, marker_plasma_filter_treatment,n = 15,
+seu_plot_heatmap(plasma_filter, marker_plasma_filter_treatment, n = 15,
                  sort_var =  c("disease", "treatment", "subtype", "seurat_clusters"), row_font_size = 8,
                  anno_var = c("treatment", "disease", "subtype", "seurat_clusters"), anno_colors = list("Set2", "Set3", "Set2", "Set3"))
 Idents(plasma_filter) <- "pair"

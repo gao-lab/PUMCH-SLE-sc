@@ -87,13 +87,13 @@ chordDiagram(mat, annotationTrack = "grid",
              preAllocateTracks = list(track.height = 0.2), transparency = 0.5)
 
 circos.trackPlotRegion(track.index = 1, bg.border = NA,
-       panel.fun = function(x, y) {
-                   sector.name <- get.cell.meta.data("sector.index")
-                   xlim <- get.cell.meta.data("xlim")
-                   ylim <- get.cell.meta.data("ylim")
-                   circos.text(mean(xlim), ylim[1], cex = 0.5, sector.name, facing = "clockwise", adj = c(0, 0.5))
-                   }
-       )
+                     panel.fun = function(x, y) {
+                                 sector.name <- get.cell.meta.data("sector.index")
+                                 xlim <- get.cell.meta.data("xlim")
+                                 ylim <- get.cell.meta.data("ylim")
+                                 circos.text(mean(xlim), ylim[1], cex = 0.5, sector.name, facing = "clockwise", adj = c(0, 0.5))
+                                 }
+                     )
 
 circos.clear()
 

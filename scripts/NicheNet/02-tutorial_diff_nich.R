@@ -33,10 +33,10 @@ Idents(pbmc_nich) <- "aggre"
 # ------------------------- Step1 Define the compare ----------------------------
 niches <- list(
   "untreated_niche" = list(
-                      "sender" = pbmc_nich$aggre %>% unique() %>% grep(pattern = "untreated",value = T),
+                      "sender" = pbmc_nich$aggre %>% unique() %>% grep(pattern = "untreated", value = T),
                       "receiver" = c("Plasma_untreated")),
   "HC_niche" = list(
-                "sender" = pbmc_nich$aggre %>% unique() %>% grep(pattern = "HC",value = T),
+                "sender" = pbmc_nich$aggre %>% unique() %>% grep(pattern = "HC", value = T),
                 "receiver" = c("Plasma_HC")))
 # only ligands important for sender cell types
 plan("multiprocess", workers = 12)
@@ -194,7 +194,7 @@ exprs_sender_receiver <- lr_network %>%
 ligand_scaled_receptor_expression_fraction_df <- exprs_sender_receiver %>% group_by(ligand, receiver) %>%
   mutate(rank_receptor_expression = dense_rank(receptor_expression), rank_receptor_fraction  = dense_rank(receptor_fraction)) %>%
   mutate(ligand_scaled_receptor_expression_fraction = 0.5*((rank_receptor_fraction / max(rank_receptor_fraction)) +
-                                                            ((rank_receptor_expression / max(rank_receptor_expression)))) ) %>%
+                                                            ((rank_receptor_expression / max(rank_receptor_expression))))) %>%
   distinct(ligand, receptor, receiver, ligand_scaled_receptor_expression_fraction, bonafide) %>% distinct() %>% ungroup()
 
 # ----------------------------- Step 7 -----------------------------------------

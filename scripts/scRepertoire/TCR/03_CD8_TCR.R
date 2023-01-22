@@ -15,7 +15,7 @@ combined_tcr.df <- rbindlist(combined_tcr)
 
 # -------------- bulid seurat object with TCR -------------
 scRepertoire_barcode <- cd8_filter@meta.data %>% rownames_to_column("barcode") %>% 
-    mutate(new_barcode = str_split_fixed(barcode, "_",2)[, 1]) %>% 
+    mutate(new_barcode = str_split_fixed(barcode, "_", 2)[, 1]) %>% 
     mutate(scRepertoire=paste0(orig.ident, "_",group, "_",new_barcode)) %>% select(scRepertoire) 
 
 cd8_tcr <- RenameCells(cd8_filter, new.names = scRepertoire_barcode$scRepertoire)

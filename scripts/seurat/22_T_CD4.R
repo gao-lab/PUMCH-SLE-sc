@@ -65,7 +65,7 @@ cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(6))] <- "T.CD4.Th2"
 # cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(4))] <- "Tem"
 cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(8))] <- "T.CD4.Tfh"
 # cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(9))] <- "Tfh"
-cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(0, 1,2))] <- "T.CD4.naive"
+cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(0, 1, 2))] <- "T.CD4.naive"
 DimPlot(cd4_filter, label = T, group.by = "subtype")
 
 Idents(cd4_filter) <- "subtype"
@@ -118,7 +118,7 @@ tmp2 <- cd4_filter@meta.data  %>%
   filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>% 
   filter(!orig.ident == "XYY2") %>% filter(!subtype == "unknown")
 data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype, 
-           before = tmp2$Ratio, after = tmp1$Ratio ) %>%
+           before = tmp2$Ratio, after = tmp1$Ratio) %>%
   # mutate(across(subtype,factor, levels = c("B.transition", "B.naive", "B.IFN-response",
   #                                          "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-"))) %>%
   ggpaired(cond1 = "before", cond2 = "after",
@@ -140,13 +140,13 @@ tmp2 <- cd4_filter@meta.data  %>%
   filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>% 
   filter(!orig.ident == "XYY2") %>% filter(!seurat_clusters == "unknown")
 data.frame(sample = tmp1$orig.ident, seurat_clusters = tmp1$seurat_clusters, 
-          before = tmp2$Ratio, after = tmp1$Ratio ) %>%
+          before = tmp2$Ratio, after = tmp1$Ratio) %>%
   # mutate(across(seurat_clusters,factor, levels = c("B.transition", "B.naive", "B.IFN-response",
   #                                          "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-"))) %>%
   ggpaired(cond1 = "before", cond2 = "after",
             fill = "condition", line.color = "gray", line.size = 0.4,
             palette = "npg") +  stat_compare_means(paired = TRUE, method = "t.test", label.x = 1.4, label = "p.format") +
-  ylab("Prolife Plasma ratio") + facet_wrap(~seurat_clusters, scales = "free", ncol = 4 )
+  ylab("Prolife Plasma ratio") + facet_wrap(~seurat_clusters, scales = "free", ncol = 4)
 
 #---------------------------------- Save ---------------------------------------
 save(cd4_filter,file = "./final/seurat/t_cell/04-CD4_Tcell_filter_anno.rdata")
@@ -160,8 +160,8 @@ treg <- subset(cd4_filter, idents = "T.CD4.Treg")
 Idents(treg) <- "treatment"
 
 marker_treg_untreat <- FindMarkers(treg, ident.1 = "untreated", ident.2 = "HC")
-marker_treg_untreat_filter <- marker_treg_untreat[!startsWith(rownames(marker_treg_untreat), "MT"),]
-marker_treg_untreat_filter <- marker_treg_untreat_filter[!startsWith(rownames(marker_treg_untreat_filter), "RP"),]
+marker_treg_untreat_filter <- marker_treg_untreat[!startsWith(rownames(marker_treg_untreat), "MT"), ]
+marker_treg_untreat_filter <- marker_treg_untreat_filter[!startsWith(rownames(marker_treg_untreat_filter), "RP"), ]
 marker_treg_untreat_filter %>% arrange(avg_log2FC) %>% head(20)
 marker_treg_untreat_filter %>% arrange(avg_log2FC) %>% tail(20)
 EnhancedVolcano(marker_treg_untreat_filter,

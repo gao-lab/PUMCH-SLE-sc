@@ -34,7 +34,7 @@ DotPlot2(cd8_filter, marker_list = c("IFIT3", "ISG15", "MX1", "OAS1", "IFI44L"))
 
 #------------------------------- Finder markers -----------------------------------
 plan("multiprocess", workers = 10)
-options(future.globals.maxSize= 100 * 1000 * 1024 ^2)
+options(future.globals.maxSize = 100 * 1000 * 1024 ^2)
 # marker_all_cd8 <- FindAllMarkers(object = cd8_filter, only.pos = T, logfc.threshold = 0.25)
 back_run(func = FindAllMarkers, out_name = "marker_all_cd8", job_name = "marker_all_cd8",
         object = cd8_filter, only.pos = T, logfc.threshold = 0.25)
@@ -103,7 +103,7 @@ data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype,
             line.size = 0.4, palette = "npg", legend = "right") +
   stat_compare_means(paired = TRUE, method = "t.test", label.x = 1.4, tip.length = T) +
   ylab("Prolife Plasma ratio") + facet_wrap(~subtype, scales = "free", ncol = 5)
-rm(tmp1,tmp2)
+rm(tmp1, tmp2)
 
 ## test
 cd8_filter@meta.data  %>%

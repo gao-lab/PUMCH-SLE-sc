@@ -11,12 +11,12 @@ bcr_df <- rbindlist(combined_bcr)
 # plasma cells
 plasma_filter %>% Cells() %>% head()
 scRepertoire_barcode <- plasma_filter@meta.data %>% rownames_to_column("barcode_bcr") %>%
-    mutate(new_barcode = str_split_fixed(barcode_bcr, "_",2)[, 1]) %>%
+    mutate(new_barcode = str_split_fixed(barcode_bcr, "_", 2)[, 1]) %>%
     mutate(scRepertoire = paste0(orig.ident, "_", group, "_", new_barcode)) %>% select(scRepertoire)
 plasma_filter_bcr <- RenameCells(plasma_filter, new.names = scRepertoire_barcode$scRepertoire)
 
 
-# bcell(not need change seurat cells barcode because done )
+# bcell(not need change seurat cells barcode because done)
 # bcell_filter
 
 all_b <- merge(x = bcell_filter, y = plasma_filter_bcr)

@@ -27,10 +27,10 @@ ranks<- B.ifn_gesa %>%
     dplyr::select(feature, logFC) %>% deframe()
 
 # do fgsea
-fgseaRes<- fgsea(fgsea_sets, stats = ranks,  nperm = 10000, minSize = 0, maxSize = 1000)
-fgseaResTidy <- fgseaRes %>% as_tibble() %>%   arrange(desc(NES))
+fgseaRes<- fgsea(fgsea_sets, stats = ranks, nperm = 10000, minSize = 0, maxSize = 1000)
+fgseaResTidy <- fgseaRes %>% as_tibble() %>%  arrange(desc(NES))
 
-ggplot(fgseaResTidy %>% filter(padj < 0.05) %>% head(n= 50), aes(reorder(pathway, NES), NES)) +
+ggplot(fgseaResTidy %>% filter(padj < 0.05) %>% head(n = 50), aes(reorder(pathway, NES), NES)) +
     geom_col(aes(fill = NES < 7.5)) +
     coord_flip() +
     labs(x = "Pathway", y = "Normalized Enrichment Score",
@@ -81,10 +81,10 @@ plotGSEA_Hallmark <- function(gsea, group_ref = NULL, cols = NULL, newlabels = N
     gsea$pval[which(is.na(gsea$pval))] <- 1
     gsea$padj[which(is.na(gsea$padj))] <- 1
     gsea$ranking[which(is.na(gsea$ranking))] <- 0
-    gsea <- gsea[order(gsea$ranking),]
+    gsea <- gsea[order(gsea$ranking), ]
     # gsea_spl <- split(gsea, gsea$group)
     # if (!is.null(group_ref)) {
-    #     gsea_spl[[group_ref]] <- gsea_spl[[group_ref]][order(gsea_spl[[group_ref]]$ranking),]
+    #     gsea_spl[[group_ref]] <- gsea_spl[[group_ref]][order(gsea_spl[[group_ref]]$ranking), ]
     #     gsea_spl[[group_ref]]$ranking <- gsea_spl[[group_ref]]$ranking*999
     # } else {
     #     gsea_spl[[2]] <- gsea_spl[[2]]$ranking*999
@@ -123,13 +123,13 @@ plotGSEA_Hallmark <- function(gsea, group_ref = NULL, cols = NULL, newlabels = N
         xval2 <- x_lim_max
     }
 
-    g <- ggplot(gsea, aes(x = -log10(padj)*sign(NES), y = reorder(pathway, ranking), fill  = group, size = abs(NES))) +
+    g <- ggplot(gsea, aes(x = -log10(padj) * sign(NES), y = reorder(pathway, ranking), fill  = group, size = abs(NES))) +
         scale_fill_manual(values = cols) +
-        geom_point(shape = 21, colour = "black",alpha = 0.7, position = position_jitter(width = 0,height = 0)) +
+        geom_point(shape = 21, colour = "black",alpha = 0.7, position = position_jitter(width = 0, height = 0)) +
         labs(x = expression(paste("Signed", " -log" ["10"], "adjusted pval")), y = "Hallmarks") +
         theme_bw() +
-        geom_vline(xintercept = 0) + geom_vline(xintercept = -log10(0.25), linetype= "dashed", colour = "gray") +
-        geom_vline(xintercept = -log10(0.25)*-1,linetype= "dashed", colour = "gray") + xlim(xval1, xval2) +
+        geom_vline(xintercept = 0) + geom_vline(xintercept = -log10(0.25), linetype = "dashed", colour = "gray") +
+        geom_vline(xintercept = -log10(0.25) * -1, linetype = "dashed", colour = "gray") + xlim(xval1, xval2) +
         scale_size_area(max_size = 7, limits = c(0, 3)) +
         theme(panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
@@ -146,8 +146,8 @@ res <- list()
 h <- as.list(kelvinny::parse_gmt("/data/sle/source/gsea/h.all.v7.2.symbols.gmt"))
 for (c in celltypes) {
     for (g in groups) {
-        comparisons[[c]][[g]] = makeGeneList(paste0("/data/sle/final/gsea/bcell/",celltype, "_",group, "gsea.csv"))
-        res[[c]][[g]] <- fgsea(pathways = h, stats = comparisons[[c]][[g]], nperm = 10000, minSize = 0, maxSize =1000) %>%
+        comparisons[[c]][[g]] <- makeGeneList(paste0("/data/sle/final/gsea/bcell/", celltype, "_", group, "gsea.csv"))
+        res[[c]][[g]] <- fgsea(pathways = h, stats = comparisons[[c]][[g]], nperm = 10000, minSize = 0, maxSize = 1000) %>%
             as.data.frame()
     }
 }
@@ -163,12 +163,12 @@ for (i in 1:length(comparisons)) {
     })
 }
 
-result <- lapply(result ,function(x) {
-    x[["untreated"]]$group = "untreated"
-    x[["treated"]]$group = "treated"
-    # x[["Moderate"]]$group = "Moderate"
-    # x[["Mild"]]$group = "Mild"
-    # x[["Asymptomatic"]]$group = "Asymptomatic"
+result <- lapply(result, function(x) {
+    x[["untreated"]]$group <- "untreated"
+    x[["treated"]]$group <- "treated"
+    # x[["Moderate"]]$group <- "Moderate"
+    # x[["Mild"]]$group <- "Mild"
+    # x[["Asymptomatic"]]$group <- "Asymptomatic"
     return(x)
 })
 result2 <- lapply(result, function(x) {
@@ -176,4 +176,4 @@ result2 <- lapply(result, function(x) {
     return(y)
 })
 
-plotGSEA_Hallmark(result2$`B.IFN-response`,keep_significant_only = T, group_ref = "untreated")
+plotGSEA_Hallmark(result2$`B.IFN-response`, keep_significant_only = T, group_ref = "untreated")

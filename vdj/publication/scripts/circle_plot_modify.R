@@ -1,7 +1,7 @@
 #args <- c("untreated_tcr.fancyvj.wt.txt", "untreated_tcr.fancyvj.wt.pdf")
 # .libPaths("/rd2/user/xiacr/sle/tcr_vdj/publication/vdjtools/Rpackages/")
 # args<-commandArgs(TRUE)
-# 
+
 # file_in  <- args[1]
 # file_out <- args[2]
 
@@ -16,7 +16,7 @@ temp <- read.table(file_in, sep = "\t", comment = "")
 n <- nrow(temp)
 m <- ncol(temp)
 rn <- as.character(temp[2:n, 1])
-cn <- apply(temp[1,2:m], 2 , as.character)
+cn <- apply(temp[1, 2:m], 2, as.character)
 mat <- matrix(apply(temp[2:n, 2:m], 1:2, as.numeric), n - 1, m -1) * 100
 
 n <- nrow(temp)
@@ -28,7 +28,7 @@ m <- ncol(temp)
 duplicates <- intersect(rn, cn)
 
 rownames(mat) <- replace(rn, rn == duplicates, paste("V", duplicates, sep = ""))
-colnames(mat) <- replace(cn, cn ==duplicates, paste("J", duplicates, sep = ""))
+colnames(mat) <- replace(cn, cn == duplicates, paste("J", duplicates, sep = ""))
 
 # sort
 
@@ -76,8 +76,8 @@ if (grepl("\\.pdf$", file_out)) {
 
 circos.par(gap.degree = c(rep(1, nrow(mat) - 1), 10, rep(1, ncol(mat) - 1), 15), start.degree = 5)
 
-rcols <- rep(brewer.pal(12, "Paired"), nrow(mat)/12 + 1)[1:nrow(mat)]
-ccols <- rep(brewer.pal(12, "Paired"), ncol(mat)/12 + 1)[1:ncol(mat)]
+rcols <- rep(brewer.pal(12, "Paired"), nrow(mat) / 12 + 1)[1:nrow(mat)]
+ccols <- rep(brewer.pal(12, "Paired"), ncol(mat) / 12 + 1)[1:ncol(mat)]
 
 names(rcols) <- sort(rownames(mat))
 names(ccols) <- sort(colnames(mat))
@@ -87,15 +87,14 @@ chordDiagram(mat, annotationTrack = "grid",
              preAllocateTracks = list(track.height = 0.2), transparency = 0.5)
 
 circos.trackPlotRegion(track.index = 1, bg.border = NA,
-       panel.fun = function(x, y) {
-                   sector.name <- get.cell.meta.data("sector.index")
-                   xlim <- get.cell.meta.data("xlim")
-                   ylim <- get.cell.meta.data("ylim")
-                   circos.text(mean(xlim), ylim[1], cex = 0.5, sector.name, facing = "clockwise", adj = c(0, 0.5))
-                   }
-       )
+                        panel.fun = function(x, y) {
+                           sector.name <- get.cell.meta.data("sector.index")
+                           xlim <- get.cell.meta.data("xlim")
+                           ylim <- get.cell.meta.data("ylim")
+                           circos.text(mean(xlim), ylim[1], cex = 0.5, sector.name, facing = "clockwise", adj = c(0, 0.5))
+                           }
+                     )
 
 circos.clear()
 
 dev.off()
-

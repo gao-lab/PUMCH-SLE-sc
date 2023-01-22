@@ -1,7 +1,7 @@
 library(Seurat)
 
 t_cell_merge <- merge(cd4_filter, y = c(cd8_filter, other_T_filter, nk_filter, prolife_T_filter))
-back_run(do_harmony,out_name = "t_cell_merge", job_name = "t_cell_merge",
+back_run(do_harmony, out_name = "t_cell_merge", job_name = "t_cell_merge",
         seu_obj = t_cell_merge, harmony_slot = "orig.ident", max.iter = 30, res = c(1.0, 0.8), from_begin = T)
 
 
