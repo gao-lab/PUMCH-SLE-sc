@@ -73,7 +73,7 @@ if not set(['UMAP_1','UMAP_1','barcode']).issubset(cell_meta.columns):
     # print()
     raise RuntimeError('ERROR: seurat cell meta is not valid, please check it!')
 
-adata_sub = adata[adata.obs['barcode'].isin(cell_meta['barcode'] )]
+adata_sub = adata[adata.obs['barcode'].isin(cell_meta['barcode'])]
 adata_sub.obs = adata_sub.obs.rename_axis("CellID").reset_index()
 adata_sub.obs = adata_sub.obs.merge(cell_meta, how='left', left_on='barcode', right_on='barcode')
 adata_sub.obs = adata_sub.obs.set_index('CellID')

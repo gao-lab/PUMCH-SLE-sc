@@ -1,6 +1,5 @@
 library(cowplot)
 library(harmony)
-# library(RISC)
 library(Seurat)
 library(tidyverse)
 library(ggpubr)

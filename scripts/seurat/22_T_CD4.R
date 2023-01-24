@@ -168,31 +168,3 @@ EnhancedVolcano(marker_treg_untreat_filter,
                 lab = rownames(marker_treg_untreat_filter),
                 x = "avg_log2FC", pointSize = 4, xlim = c(-3, 3),
                 y = "p_val_adj", FCcutoff = 0.7, legendPosition = "right", title = "Treg")
-
-
-
-#----------------------------- projectTIL anno (abandon)---------------------------
-library(ProjecTILs)
-ref <- load.reference.map("./source/projectTIL/ref_TILAtlas_mouse_v1.rds")
-
-
-down_sample <- T
-size <- 1000
-ncores <- 4
-for (i in c(0:1)) {
-  tmp <- subset(cd4_filter, idents = i)
-  if (down_sample) {tmp <- tmp[, sample(colnames(tmp), size = size, replace = F)]}
-  out_name = paste0("project.cd4.cluster_", i)
-  print(out_name)
-  back_run(func = make.projection,out_name = out_name,job_name = out_name,
-          tmp = tmp, ref = ref, filter.cells = F,future.maxSize = 1024*20, ncores = ncores)
-}
-
-# sample_data <- cd4_filter[, sample(colnames(cd4_filter), size = 1000, replace = F)]
-sample_data <- subset(cd4_filter, idents = 4)
-# querydata <- ProjecTILs::query_example_seurat
-query.projected <- make.projection(sample_data, ref = ref, filter.cells = F, ncores = 32, future.maxSize = 1024*200)
-plot.projection(ref, query.projected)
-query.projected <- cellstate.predict(ref = ref, query = query.projected)
-plot.statepred.composition(ref, query.projected,metric = "Percent")
-plot.states.radar(ref, query = query.projected, min.cells = 30)

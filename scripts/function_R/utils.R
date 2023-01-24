@@ -25,7 +25,7 @@ TLR_genes <- paste0("TLR", c(1:10))
 if (exists("t.cd4.filter")) {
 IL_genes <- c(grep(rownames(t.cd4.filter), pattern = "^IL[0-9]$", value = T) %>% sort(),
               grep(rownames(t.cd4.filter), pattern = "^IL[0-9][0-9]$", value = T) %>% sort())
-}else(print("not exists t.cd4.filter, need initialize IL_genes"))
+}else (print("not exists t.cd4.filter, need initialize IL_genes"))
 
 # CD8 markers
 t_cd8_effect_marker <- c("GZMK", "KLRD1", "GZMB", "CCL5", "IFNG ")
@@ -194,11 +194,11 @@ plot_reactome <- function(seu_obj, focus = NULL, max_pathways = 18) {
 # >>> nothing
 keggo_plot <- function(genes) {
   library(clusterProfiler)
-  gene <- bitr(genes, fromType = "SYMBOL", toType= c("ENSEMBL", "ENTREZID"), OrgDb = "org.Hs.eg.db")
+  gene <- bitr(genes, fromType = "SYMBOL", toType = c("ENSEMBL", "ENTREZID"), OrgDb = "org.Hs.eg.db")
   kegg <- enrichKEGG(gene = gene$ENTREZID,
                      organism = "hsa",
                      pvalueCutoff = 1)
-  dotplot(kegg, title= "Enrichment KEGG_dot") %>% print()
+  dotplot(kegg, title = "Enrichment KEGG_dot") %>% print()
 
   ego_ALL <- enrichGO(gene = gene$ENTREZID, OrgDb = org.Hs.eg.db,
                       ont = "ALL", pAdjustMethod = "BH", readable = TRUE)
@@ -209,7 +209,7 @@ keggo_plot <- function(genes) {
 # calculate the overlap before and after the treatment (just simplify the scatterClonotype())
 # @ <all>    : please refer scatterClonotype()
 # @ filter_NA: filter the cell without heavy chain
-treat_overlap <- function (df, cloneCall = "gene+nt", x.axis = NULL, dot.size = "total",
+treat_overlap <- function(df, cloneCall = "gene+nt", x.axis = NULL, dot.size = "total",
                            y.axis = NULL, chain = "both", split.by = NULL, filter_NA = T) {
   df <- list.input.return(df, split.by)
   cloneCall <- theCall(cloneCall)
@@ -242,8 +242,8 @@ vizGenes2 <- function(combined_xcr, gene = "V", chain= "IGH", y.axis = "J", titl
   vizGenes(combined_xcr, gene = gene, chain = chain, y.axis = y.axis,
            plot = "heatmap", scale = TRUE, order = "gene") +  theme_void() +
     ggtitle(title) + theme(axis.text.x = element_text(angle = 90, vjust = 1, size = 10, hjust = 1)) +
-    theme(axis.text.x = element_text(size = 8),axis.text.y = element_text(size = 8)) +
-    scale_fill_viridis(na.value = "grey", limit = limit, space = "Lab",name = "Preference")
+    theme(axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)) +
+    scale_fill_viridis(na.value = "grey", limit = limit, space = "Lab", name = "Preference")
 }
 
 
@@ -254,13 +254,13 @@ vizGenes2 <- function(combined_xcr, gene = "V", chain= "IGH", y.axis = "J", titl
 # @title        : title of the plot
 # @limit        : set limit of max value(value greater than this vill be white !!!)
 # >>> Nothing (plotting)
-clonalOverlap2 <- function(seu_with_xcr, cloneCall = "gene+nt",method= "jaccard",
+clonalOverlap2 <- function(seu_with_xcr, cloneCall = "gene+nt", method= "jaccard",
                            title= "Need Title", limit = c(0, 0.5)) {
-  clonalOverlap(seu_with_xcr, cloneCall=cloneCall, method=method,exportTable = T) %>% reshape2::melt("names") %>%
+  clonalOverlap(seu_with_xcr, cloneCall = cloneCall, method = method, exportTable = T) %>% reshape2::melt("names") %>%
     ggplot(aes(x = names,y = variable, fill = value)) +
-    geom_tile() +theme_bw() +
+    geom_tile() + theme_bw() +
     theme_minimal() +
-    scale_fill_viridis(na.value = "white", limit = limit,space = "Lab", name = paste0(str_to_title(method), " index")) +
+    scale_fill_viridis(na.value = "white", limit = limit, space = "Lab", name = paste0(str_to_title(method), " index")) +
     labs(title = title) +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 10, hjust = 1),
           plot.title = element_text(size = 14, hjust = 0.5, face = "bold"),
@@ -268,12 +268,12 @@ clonalOverlap2 <- function(seu_with_xcr, cloneCall = "gene+nt",method= "jaccard"
           axis.title = element_blank(),
           panel.grid.major = element_blank(),
           panel.background = element_blank(),
-          legend.justification = c(1,0),
+          legend.justification = c(1, 0),
           legend.position = c(1.3, 0.3),
           legend.direction = "horizontal") + # vertical /horizontal
     coord_fixed() +
-    guides(fill = guide_colorbar(barwidth = 9,barheight = 1.5,
-                                 title.position = "top", title.hjust = 0.1))
+    guides(fill = guide_colorbar(barwidth = 9, barheight = 1.5,
+                                title.position = "top", title.hjust = 0.1))
 }
 
 
@@ -290,8 +290,8 @@ seu_to_iTALK <- function(seu_obj, cell_type = "subtype", compare_group = "diseas
   colnames(iTalk_data) <- rownames(downsample_count_mat)
   rownames(iTalk_data) <- colnames(downsample_count_mat)
   rm(downsample_count_mat)
-  iTalk_data <- cbind(data.frame(cell_type = do.call(`$`, args = list(seu_obj,cell_type))), iTalk_data)
-  iTalk_data <- cbind(data.frame(compare_group = do.call(`$`, args = list(seu_obj,compare_group))), iTalk_data)
+  iTalk_data <- cbind(data.frame(cell_type = do.call(`$`, args = list(seu_obj, cell_type))), iTalk_data)
+  iTalk_data <- cbind(data.frame(compare_group = do.call(`$`, args = list(seu_obj, compare_group))), iTalk_data)
 
   return(iTalk_data)
   # highly_exprs_genes <- rawParse(iTalk_data, top_genes= Top_genes, stats= "mean")
@@ -370,7 +370,7 @@ sparse_to_dense <- function(dgc_matrix, formart = "data.table", file_name = NULL
 # @set     : which set of RColorBrewer do you want
 # @set_len : length of the set you want
 # >>> color in 256 rgb format
-get_color <-function(len = NULL, set = "Set1", set_len = 9) {
+get_color <- function(len = NULL, set = "Set1", set_len = 9) {
   if (is.null(len)) {
     print(display.brewer.all())
     return(NULL)}
@@ -420,11 +420,11 @@ plot_gsea <- function(seu_obj, group_by, focus, title = "please change title",
   ranks <- deframe(focus.genes)
   fgsea_results <- fgsea(fgsea_sets, stats = ranks, nperm = 10000)
 
-  fgsea_results %<>% arrange (padj,desc(NES)) %>% select (pathway, padj, NES) %>%
+  fgsea_results %<>% arrange(padj, desc(NES)) %>% select(pathway, padj, NES) %>%
     {rbind(head(., 8), tail(., 8))}
 
   print(dim(fgsea_results))
-  fgsea_results$pathway <- str_split_fixed(fgsea_results$pathway, pattern = "_",n = 2)[2] %>% str_replace("_", " ") %>% str_to_title()
+  fgsea_results$pathway <- str_split_fixed(fgsea_results$pathway, pattern = "_", n = 2)[2] %>% str_replace("_", " ") %>% str_to_title()
   View(fgsea_results)
 
   plot <- fgsea_results %>%
@@ -478,8 +478,8 @@ do_harmony <- function(seu_obj = seu_obj, harmony_slot = "orig.ident", theta = 2
                                 g2m.features = cc.genes$g2m.genes, set.ident = T)
     hvg <- VariableFeatures(seu_obj)
 
-    feature_exclude = feature_exclude # remove HLA, immunoglobulin, RNA, MT, and RP genes based on HUGO gene names
-    hvg = grep(feature_exclude, hvg, invert = T, value = T)
+    feature_exclude <- feature_exclude # remove HLA, immunoglobulin, RNA, MT, and RP genes based on HUGO gene names
+    hvg <- grep(feature_exclude, hvg, invert = T, value = T)
 
     if (scale_all) {
       all.genes <- rownames(seu_obj)
@@ -492,7 +492,7 @@ do_harmony <- function(seu_obj = seu_obj, harmony_slot = "orig.ident", theta = 2
 
     seu_obj <- RunPCA(object = seu_obj, verbose = F, features = hvg)
     if (save_tmp) {
-      save(seu_obj,file = save_path)
+      save(seu_obj, file = save_path)
     }
 
     # seu_obj <- FindNeighbors(object = seu_obj)
@@ -551,9 +551,9 @@ trans_Ensemble_Symbol <- function(mat, species = "human") {
                       values = rownames(mat), mart = mart)
   trans_list <- trans_list[!duplicated(trans_list[, 1]), ]
   trans_list <- trans_list[!duplicated(trans_list[, 2]), ]
-  trans_list <- trans_list[-which(trans_list[, 2]== ""), ]
-  gene_list <- merge(as.data.frame(rownames(mat)),trans_list,
-                     by.x = "rownames(mat)", by.y= "ensembl_gene_id",
+  trans_list <- trans_list[-which(trans_list[, 2] == ""), ]
+  gene_list <- merge(as.data.frame(rownames(mat)), trans_list,
+                     by.x = "rownames(mat)", by.y = "ensembl_gene_id",
                      all.x = T, sort = F)
   mat <- mat[!is.na(gene_list[, 2]), ]
   rownames(mat) <- gene_list[, 2][!is.na(gene_list[, 2])]
@@ -614,9 +614,9 @@ do_seurat_back <- function(seu_obj, name, scale_all = F, res = 0.8, qc = F,
     source("/data/TLB/scripts/function_R/utils.R")
     # name <- do_seurat(seu_obj,scale_all=scale_all ,res=res,qc=qc,
     # feature_exclude=feature_exclude,reg =reg,vars.reg=vars.reg)
-    assign(name , do_seurat(seu_obj,scale_all ,res,qc,feature_exclude,reg,vars.reg))
+    assign(name, do_seurat(seu_obj, scale_all, res, qc, feature_exclude, reg, vars.reg))
     # job::export()
-  },import = "auto", title = paste0(name, "_job")
+  }, import = "auto", title = paste0(name, "_job")
   )
 
 }
@@ -666,7 +666,7 @@ do_seurat <- function(seu_obj, scale_all = F, res = 0.8, qc = F,
   seu_obj <- RunPCA(object = seu_obj, verbose = F, features = hvg)
   seu_obj <- FindNeighbors(object = seu_obj)
   seu_obj <- FindClusters(object = seu_obj, resolution = res)
-  seu_obj <- RunUMAP(object = seu_obj,dims = 1:30)
+  seu_obj <- RunUMAP(object = seu_obj, dims = 1:30)
   return(seu_obj)
 }
 
@@ -692,7 +692,7 @@ detachAllPackages <- function() {
 }
 
 # Help the function seu_plot_heatmap() to choose the DEGs
-get_top_genes_new <- function (dataset, markers, n)
+get_top_genes_new <- function(dataset, markers, n)
 {
   library(Scillus)
   int_features <- rownames(dataset@assays$RNA@scale.data)
@@ -701,13 +701,13 @@ get_top_genes_new <- function (dataset, markers, n)
     filter(row_number() <= n) %>% arrange(.data$cluster)
   return(df$gene)
 }
-are_colors_new <- function (x)
+are_colors_new <- function(x)
 {
   sapply(x, function(X) {
     tryCatch(is.matrix(col2rgb(X)), error = function(e) FALSE)
   })
 }
-set_colors_new <- function (pal, n)
+set_colors_new <- function(pal, n)
 {
   if (all(pal %in% rownames(brewer.pal.info))) {
     num <- c()
@@ -743,7 +743,7 @@ set_colors_new <- function (pal, n)
 # @ hm_limit    : plot para
 # @ hm_colors   : plot para
 # @ row_font_size: plot para
-seu_plot_heatmap <- function (dataset, markers, sort_var = c("seurat_clusters"),
+seu_plot_heatmap <- function(dataset, markers, sort_var = c("seurat_clusters"),
                               n = 8, anno_var, anno_colors, hm_limit = c(-2, 0, 2),
                               hm_colors = c("#4575b4", "white", "#d73027"), row_font_size = 12)
 {

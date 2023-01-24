@@ -1,5 +1,5 @@
 library(Scillus)
-library(CEMiTool)
+library(igraph)
 
 setwd("/data/sle")
 output_path <- "./output_file/seurat/mono_dc/"
@@ -100,8 +100,6 @@ plot_gsva_pca(gsva_result)
 pdc$subtype <- "unknown"
 
 #----------------------------- Check the Ratio ---------------------------------
-
-
 # bar plot
 plot_stat(pdc_filter, plot_type = "prop_multi", pal_setup = "Set2", group_by = "treatment")
 pdc_filter@meta.data %>% filter(group != "pSS_pah") %>%
@@ -177,7 +175,6 @@ tmp <- show_plot(cem, "ora")
 DoHeatmap2(pdc_filter,marker_list = c("APBBIIP", "ABCE1", "A1BG", "COMMD1"))
 
 
-library("igraph")
 int_df <- int_df[int_df$importance > 10, ]
 links <- int_df[, -1]
 nodes <- rbind(data.frame(gene = unique(links$TF), attr = rep("TF", length(unique(links$TF)))),

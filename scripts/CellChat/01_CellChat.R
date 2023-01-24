@@ -53,7 +53,8 @@ for (i in 1:nrow(mat)) {
 # ----------------------- show specific pathway  -------------------------------
 pathways.show <- c("MHC-I") # CXCL BAFF IFN-II MHC-I
 # Hierarchy plot
-# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast and the right portion shows signaling to immune cells
+# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast
+#  and the right portion shows signaling to immune cells
 vertex.receiver <- seq(1, 4) # a numeric vector.
 # netVisual_aggregate(cellchat, signaling = pathways.show, vertex.receiver = vertex.receiver, arrow.width = 0.1,arrow.size = 0.1, layout = "chord")
 par(mfrow = c(1, 1))
