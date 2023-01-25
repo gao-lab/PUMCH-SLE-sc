@@ -25,7 +25,7 @@ parser.add_argument('-n','--jobs', default=32,type=int,
 parser.add_argument('-m','--mode', choices=['basic', 'dynamic','both'] , default='both',
                    help='Choose scVelo mode, default will run both')
 parser.add_argument('-g','--group', default='subtype',type=str,
-                   help='(optional) varaible in seurat meta to group the cell subtype')
+                   help='(optional) variable in seurat meta to group the cell subtype')
 parser.add_argument('-s','--save', action='store_true',
                    help='(optional) if save the adata')
 results = parser.parse_args()

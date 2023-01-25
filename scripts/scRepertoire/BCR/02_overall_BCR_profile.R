@@ -21,8 +21,8 @@ load("final/scRepertoire/BCR/combined_bcr.rdata")
 # we find it will get different result when using not filtered BCR repertoire and filtered by seurat barcode
 
 combined_bcr <- addVariable(combined_bcr, name = "group",
-                       variables = c("before", "before", "before", "after", "before", "before", "before", "after", "before", "HC", "before",
-                                     "before", "after", "before", "before", "after", "after", "HC", "HC", "before", "after", "HC"))
+                            variables = c("before", "before", "before", "after", "before", "before", "before", "after", "before", "HC", "before",
+                                        "before", "after", "before", "before", "after", "after", "HC", "HC", "before", "after", "HC"))
 
 bcell_rna_meta <- read.csv("./vdj/immcatation/analysis/seurat_bcell_filter_meta.csv")
 plasma_rna_meta <- read.csv("./vdj/immcatation/analysis/seurat_plasma_filter_meta.csv")
