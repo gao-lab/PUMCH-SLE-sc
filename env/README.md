@@ -1,6 +1,6 @@
-# R env in Rstudio
+# R env
 
-## Push the docker
+## Pull the Rstudio docker
 
 ```bash
 docker push rocker/rstudio:4.2.1
@@ -28,6 +28,7 @@ Install the following packages in Rstudio
 - clusterProfiler
 
 ## Install packages via renv (Optional)
+You can also install packages via renv. Please run the following command in the Rstudio console.
 
 ```R
 install.packages('renv')
@@ -35,7 +36,7 @@ renv::restore()
 ```
 
 # Python env
-Please install following packages in python > 3.8 in a new conda environment.
+Please install following packages in a new conda environment with python > 3.8.
 - snakemake 
 - scanpy
 - scvelo
@@ -44,4 +45,4 @@ Please install following packages in python > 3.8 in a new conda environment.
 - loompy
 
 # Additional packages
-You also need install [VDJtools](https://vdjtools-doc.readthedocs.io/en/master/#) manually, which relies on Java.
+Please install [VDJtools](https://vdjtools-doc.readthedocs.io/en/master/) manually, which relies on Java.
