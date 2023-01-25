@@ -1,7 +1,3 @@
-#args <- c("untreated_tcr.fancyvj.wt.txt", "untreated_tcr.fancyvj.wt.pdf")
-# .libPaths("/rd2/user/xiacr/sle/tcr_vdj/publication/vdjtools/Rpackages/")
-# args<-commandArgs(TRUE)
-# 
 # file_in  <- args[1]
 # file_out <- args[2]
 

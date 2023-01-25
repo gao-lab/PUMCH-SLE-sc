@@ -147,7 +147,7 @@ niche_geneset_list = list(
     "background" = background),
   "HC_niche" = list(
     "receiver" = niches[[2]]$receiver,
-    "geneset" = geneset_niche2 ,
+    "geneset" = geneset_niche2,
     "background" = background)
 )
 

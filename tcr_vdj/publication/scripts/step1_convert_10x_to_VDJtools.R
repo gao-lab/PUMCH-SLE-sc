@@ -7,7 +7,7 @@ repSave(imm_10x, .format = "vdjtools", .path = snakemake@output[[1]], .compress 
 
 # single chain mode
 if (str_detect(snakemake@input[[1]], "TR")) {
-    # print(list.files(path = snakemake@output[[1]]) , full.names = T)
+    # print(list.files(path = snakemake@output[[1]]), full.names = T)
     print("done")
 }else{
     # double chain mode

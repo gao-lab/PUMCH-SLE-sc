@@ -31,7 +31,7 @@ back_run(reduceDimension, out_name = "cds", job_name = "DDRTree",
          cds, method = "DDRTree")
 
 ## ordering cells(use the follow version)
-# cds <- monocle::orderCells(cds) # very slow , use backend mode
+# cds <- monocle::orderCells(cds) # very slow, use backend mode
 back_run(orderCells,out_name = "cds", job_name = "monocle::orderCells", cds, num_paths = 1)
 plot_cell_trajectory(cds, color_by = "subtype")
 plot_cell_trajectory(cds, color_by = "subtype") + facet_wrap(~subtype)

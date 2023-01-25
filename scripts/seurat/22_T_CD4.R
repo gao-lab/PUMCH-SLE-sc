@@ -9,8 +9,8 @@ source("./scripts/function_R/utils.R")
 
 # Already Harmony
 load("./final/seurat/t_cell/03-CD4_Tcell_raw_harm.rdata")
-DimPlot(cd4_filter, label = T) + DimPlot(cd4_filter,group.by = "subtype")
-FeaturePlot(cd4_filter,features = c("CD4", "CD8A", "CD8B"), ncol = 3)
+DimPlot(cd4_filter, label = T) + DimPlot(cd4_filter, group.by = "subtype")
+FeaturePlot(cd4_filter, features = c("CD4", "CD8A", "CD8B"), ncol = 3)
 
 cd4_filter <- subset(cd4_filter, idents = 11, invert = T)
 cd4_filter_index <- CellSelector(DimPlot(cd4_filter))
@@ -19,7 +19,7 @@ cd4_filter <- subset(cd4_filter, invert =  T, cells = cd4_filter_index)
 
 DimPlot(cd4_filter, label = T, cols = rev(get_color(11)), group.by = "subtype", pt.size = 0.3) + NoAxes()
   # title("CD4+ T cell")
-# plot_scdata(cd4_filter, color_by = "treatment", pal_setup = "Set2") + 
+# plot_scdata(cd4_filter, color_by = "treatment", pal_setup = "Set2") +
 #   plot_scdata(cd4_filter, color_by = "seurat_clusters", pal_setup = "Set1")
 
 FeaturePlot(cd4_filter, features = c("IL17A", "IFNG", "IL17F", "IL17B", "IL1B"))
@@ -56,9 +56,9 @@ cd4_filter$subtype <- "unknown"
 # we find that we can not explain the Th1 ratio up with Th17 ratio down in SLE
 # So I decided to anno them as Th1-liked cell totally
 cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(10))] <- "T.CD4.IFN-response"
-cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(7,9))] <- "T.CD4.Treg"
+cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(7, 9))] <- "T.CD4.Treg"
 # cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(3))] <- "T.CD4.Th1.cxcr3"
-cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(3,4,5))] <- "T.CD4.Th1"
+cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(3, 4, 5))] <- "T.CD4.Th1"
 cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(6))] <- "T.CD4.Th2"
 # cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(4))] <- "T.CD4.Th17"
 # cd4_filter$subtype[which(cd4_filter$seurat_clusters %in% c(2))] <- "Tcm"
@@ -71,53 +71,53 @@ DimPlot(cd4_filter, label = T, group.by = "subtype")
 Idents(cd4_filter) <- "subtype"
 
 #---------------------------------- Ratio---------------------------------------
-colourCount = length(11)
-getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+colourCount <- length(11)
+getPalette <- colorRampPalette(brewer.pal(9, "Set1"))
 
 # overall  ratio
 cd4_filter@meta.data %>% filter(group != "pSS_pah") %>%
-  ggplot(aes(x = group , fill = seurat_clusters)) +
+  ggplot(aes(x = group, fill = seurat_clusters)) +
   geom_bar(stat = "count", position = "fill") +
   labs(y = "proportions", x = "") +
-  scale_fill_discrete(labels = names(table(cd4_filter$seurat_clusters))) + 
+  scale_fill_discrete(labels = names(table(cd4_filter$seurat_clusters))) +
   scale_fill_manual(values = getPalette(11)) +
   labs(fill = "group") + coord_flip()
 
 # By subtype
-cd4_filter@meta.data  %>% 
+cd4_filter@meta.data  %>%
   group_by(orig.ident, subtype) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(cd4_filter@meta.data[,  c(1, 4, 5, 6)] %>% distinct()) %>%
-  filter(group != "treated") %>% 
+  filter(group != "treated") %>%
   ggpubr::ggboxplot(x = "group", y = "Ratio", fill = "group",
-                    palette = c("#FC4E07", "#00AFBB")) + 
-  facet_wrap(~subtype, scales = "free", ncol = 4) + 
+                    palette = c("#FC4E07", "#00AFBB")) +
+  facet_wrap(~subtype, scales = "free", ncol = 4) +
   stat_compare_means(comparisons = list(c("SLE", "HC")), method = "wilcox", label = "p.signif")
 
 # By cluster
 cd4_filter@meta.data %>%
-  group_by(orig.ident, seurat_clusters) %>% summarise(sub_num = n()) %>% 
+  group_by(orig.ident, seurat_clusters) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(cd4_filter@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
   ggpubr::ggboxplot(x = "group", y = "Ratio", fill = "group",
-                    palette = c("#FC4E07", "#00AFBB")) + 
-  facet_wrap(~seurat_clusters, scales = "free") + 
+                    palette = c("#FC4E07", "#00AFBB")) +
+  facet_wrap(~seurat_clusters, scales = "free") +
   stat_compare_means(method = "wilcox")
 
 # treatment paired
-tmp1 <- cd4_filter@meta.data  %>% 
-  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>% 
+tmp1 <- cd4_filter@meta.data  %>%
+  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(cd4_filter@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
-  filter(!pair == "unpaired") %>% filter(treatment == "treated") %>% 
+  filter(!pair == "unpaired") %>% filter(treatment == "treated") %>%
   filter(!orig.ident == "XYY2")  %>% filter(!subtype == "unknown")
-tmp2 <- cd4_filter@meta.data  %>% 
-  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>% 
+tmp2 <- cd4_filter@meta.data  %>%
+  group_by(orig.ident, subtype, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
-  left_join(cd4_filter@meta.data[, c(1 , 4, 5, 6)]  %>%  distinct()) %>%
-  filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>% 
+  left_join(cd4_filter@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
+  filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>%
   filter(!orig.ident == "XYY2") %>% filter(!subtype == "unknown")
-data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype, 
+data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype,
            before = tmp2$Ratio, after = tmp1$Ratio) %>%
   # mutate(across(subtype,factor, levels = c("B.transition", "B.naive", "B.IFN-response",
   #                                          "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-"))) %>%
@@ -127,19 +127,19 @@ data.frame(sample = tmp1$orig.ident, subtype = tmp1$subtype,
   ylab("Prolife Plasma ratio") + facet_wrap(~subtype, scales = "free", ncol = 8)
 
 # treatment paired (cluster)
-tmp1 <- cd4_filter@meta.data  %>% 
-  group_by(orig.ident, seurat_clusters,.drop = FALSE) %>% summarise(sub_num = n()) %>% 
+tmp1 <- cd4_filter@meta.data  %>%
+  group_by(orig.ident, seurat_clusters, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(cd4_filter@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
-  filter(!pair == "unpaired") %>% filter(treatment == "treated") %>% 
+  filter(!pair == "unpaired") %>% filter(treatment == "treated") %>%
   filter(!orig.ident == "XYY2")  %>% filter(!seurat_clusters == "unknown")
-tmp2 <- cd4_filter@meta.data  %>% 
-  group_by(orig.ident, seurat_clusters,.drop = FALSE) %>% summarise(sub_num = n()) %>% 
+tmp2 <- cd4_filter@meta.data  %>%
+  group_by(orig.ident, seurat_clusters, .drop = FALSE) %>% summarise(sub_num = n()) %>%
   mutate(sample_num = sum(sub_num)) %>% mutate(Ratio = sub_num / sample_num * 100) %>%
   left_join(cd4_filter@meta.data[, c(1, 4, 5, 6)]  %>%  distinct()) %>%
-  filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>% 
+  filter(!pair == "unpaired") %>% filter(treatment == "untreated") %>%
   filter(!orig.ident == "XYY2") %>% filter(!seurat_clusters == "unknown")
-data.frame(sample = tmp1$orig.ident, seurat_clusters = tmp1$seurat_clusters, 
+data.frame(sample = tmp1$orig.ident, seurat_clusters = tmp1$seurat_clusters,
           before = tmp2$Ratio, after = tmp1$Ratio) %>%
   # mutate(across(seurat_clusters,factor, levels = c("B.transition", "B.naive", "B.IFN-response",
   #                                          "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-"))) %>%

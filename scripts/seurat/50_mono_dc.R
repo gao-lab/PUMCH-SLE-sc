@@ -51,7 +51,7 @@ ggplot(data = mono_dc_filter@meta.data, aes(x = treatment,
 table(mono_dc_filter$seurat_clusters, mono_dc_filter$group) %>%
   as.data.frame() %>% group_by(Var2) %>%
   mutate(Frequency = sum(Freq)) %>% mutate(Ratio = Freq/Frequency*100) %>%
-ggplot() + geom_bar(mapping = aes(x = Var1 , y = Ratio, fill = Var2),
+ggplot() + geom_bar(mapping = aes(x = Var1, y = Ratio, fill = Var2),
            stat = "identity",
            position = "dodge")
 table(mono_dc_filter$seurat_clusters, mono_dc_filter$treatment) %>%
@@ -74,7 +74,7 @@ marker_all_mono.dc.filter %>% group_by(cluster) %>% top_n(avg_log2FC, n = 10) %>
 marker_mono.dc.filter_c034 <- FindMarkers(mono_dc_filter, ident.1 = c(0, 3, 4), only.pos = T,
                                           logfc.threshold = 0.25, min.diff.pct = 0.2)
 marker_mono.dc.filter_cdc1.cdc2 <-  FindMarkers(mono_dc_filter,group.by = "subtype",
-                                                ident.1 = "cDC1",ident.2 = "cDC2", only.pos = F,
+                                                ident.1 = "cDC1", ident.2 = "cDC2", only.pos = F,
                                                 logfc.threshold = 0.25, min.diff.pct = 0.2)
 marker_mono.dc.filter_cdc1.cdc2 %>% filter(p_val_adj < 0.05) %>% slice_min(avg_log2FC, n = 10) %>%
   arrange(-avg_log2FC) %>% View()

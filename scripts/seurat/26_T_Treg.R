@@ -23,8 +23,8 @@ plot_gsea(treg %>% subset(idents = "treated", invert = T), group_by = "treatment
 # clusterProfiler
 gene <- bitr(rownames(marker_Treg_sle %>% head(150)), fromType = "SYMBOL", toType = c("ENSEMBL", "ENTREZID"), OrgDb = "org.Hs.eg.db")
 kegg <- enrichKEGG(gene = gene$ENTREZID,
-                 organism = "hsa",
-                 pvalueCutoff = 1)
+                    organism = "hsa",
+                    pvalueCutoff = 1)
 dotplot(kegg, title = "Enrichment KEGG_dot")
 
 ego_ALL <- enrichGO(gene = gene$ENTREZID, OrgDb = org.Hs.eg.db,

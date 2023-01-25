@@ -4,7 +4,7 @@ source("./scripts/function_R/utils.R")
 library(reshape2)
 library(pheatmap)
 
-bk <- c(seq(-4,-0.1, by=0.01),seq(0,4, by=0.01))
+bk <- c(seq(-4, -0.1, by = 0.01), seq(0,4, by = 0.01))
 # ----------------------------------- IFN --------------------------------------
 allegs <- get("GO:0034340", org.Hs.egGO2ALLEGS)
 genes <- unlist(mget(allegs, org.Hs.egSYMBOL)) %>% unique()
@@ -18,11 +18,11 @@ IFN_logFC <- c()
 pbmc_final@meta.data %>%
     select("disease", "treatment", "subtype", "orig.ident", "IFN_score1") %>%
     group_by(treatment, subtype) %>% summarise(mean_IFN = mean(IFN_score1)) %>%
-    spread(treatment ,mean_IFN) %>% mutate(treated_HC = log2(treated/HC),
+    spread(treatment, mean_IFN) %>% mutate(treated_HC = log2(treated/HC),
                                           untreated_HC = log2(untreated/HC),
                                           untreated_treated = log2(untreated/treated)) %>%
-    column_to_rownames("subtype") %>% select(4,5,6) %>%
-    pheatmap(scale = "none", cluster_rows = F, cluster_cols = F, 
+    column_to_rownames("subtype") %>% select(4, 5, 6) %>%
+    pheatmap(scale = "none", cluster_rows = F, cluster_cols = F,
             color = c(colorRampPalette(colors = c("blue", "white"))(length(bk)/2),
                     colorRampPalette(colors = c("white", "red"))(length(bk)/2)),
             breaks = bk)
@@ -48,8 +48,8 @@ pbmc_final <- AddModuleScore(pbmc_final, features = list(JAK_genes.2), name = "J
 pbmc_final@meta.data %>%
     select("disease", "treatment", "subtype", "orig.ident", "JAK_score1") %>%
     group_by(treatment, subtype) %>% summarise(mean_IFN = mean(JAK_score1)) %>%
-    spread(treatment ,mean_IFN) %>% mutate(treated_HC = 2^(treated)-2^(HC),
-                                          untreated_HC = 2^(untreated)-2^(HC) ,
+    spread(treatment, mean_IFN) %>% mutate(treated_HC = 2^(treated)-2^(HC),
+                                          untreated_HC = 2^(untreated)-2^(HC),
                                           untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
     select(1, 2, 3) %>%
@@ -63,7 +63,7 @@ pbmc_final@meta.data %>%
     select("disease", "treatment", "subtype", "orig.ident", "JAK_score1") %>%
     group_by(treatment, subtype) %>% summarise(mean_JAK = mean(JAK_score1)) %>%
     spread(treatment, mean_JAK) %>% mutate(treated_HC = 2^(treated)-2^(HC),
-                                          untreated_HC = 2^(untreated)-2^(HC) ,
+                                          untreated_HC = 2^(untreated)-2^(HC),
                                           untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
     # select(1, 2, 3) %>%
@@ -90,7 +90,7 @@ pbmc_final@meta.data %>%
     mutate(treated_HC = 2^(treated)-2^(HC), untreated_HC = 2^(untreated)-2^(HC), untreated_treated = 2^(untreated)-2^(treated)) %>%
     column_to_rownames("subtype") %>%
     # select(1, 2, 3) %>%
-    dplyr::select(5,4) %>%
+    dplyr::select(5, 4) %>%
     pheatmap(scale = "none", cluster_rows = F, cluster_cols = F,
             color = c(colorRampPalette(colors = c("blue", "white"))(10),
                     colorRampPalette(colors = c("white", "red"))(10)),

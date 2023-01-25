@@ -10,7 +10,7 @@ bcr_df <- rbindlist(combined_bcr)
 #                             cloneCall = "aa", group.by = "sample", proportion = FALSE,
 #                             cloneTypes = c(Single = 1, Small = 5, Medium = 20, Large = 100, Hyperexpanded = 500))
 scRepertoire_barcode <- bcell_filter@meta.data %>% rownames_to_column("barcode") %>%
-    mutate(new_barcode = str_split_fixed(barcode , "_", 2)[, 1]) %>%
+    mutate(new_barcode = str_split_fixed(barcode, "_", 2)[, 1]) %>%
     mutate(scRepertoire = paste0(orig.ident, "_", group, "_", new_barcode)) %>% select(scRepertoire)
 
 bcell_filter <- RenameCells(bcell_filter, new.names = scRepertoire_barcode$scRepertoire)

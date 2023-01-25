@@ -41,8 +41,7 @@ ggplot(fgseaResTidy %>% filter(padj < 0.05) %>% head(n = 50), aes(reorder(pathwa
 # https://github.com/scCOVID-19/COVIDPBMC/blob/master/B_cell/Analysis_and_plotting/GSEA/021921_R_NewcastleSangerCambridge_GSEA.ipynb
 
 celltypes <- c("B.transition", "B.naive", "B.IFN-response", "B.mem.IGHM+", "B.mem", "B.mem.CXCR3+", "B.mem.CD27-")
-# celltypes = c("B.IFN-response")
-groups = c("untreated", "treated")
+groups <- c("untreated", "treated")
 Idents(bcell_filter) <- "subtype"
 for (celltype in celltypes) {
     for (group in groups) {
@@ -125,7 +124,7 @@ plotGSEA_Hallmark <- function(gsea, group_ref = NULL, cols = NULL, newlabels = N
 
     g <- ggplot(gsea, aes(x = -log10(padj) * sign(NES), y = reorder(pathway, ranking), fill  = group, size = abs(NES))) +
         scale_fill_manual(values = cols) +
-        geom_point(shape = 21, colour = "black",alpha = 0.7, position = position_jitter(width = 0, height = 0)) +
+        geom_point(shape = 21, colour = "black", alpha = 0.7, position = position_jitter(width = 0, height = 0)) +
         labs(x = expression(paste("Signed", " -log" ["10"], "adjusted pval")), y = "Hallmarks") +
         theme_bw() +
         geom_vline(xintercept = 0) + geom_vline(xintercept = -log10(0.25), linetype = "dashed", colour = "gray") +
@@ -166,9 +165,6 @@ for (i in 1:length(comparisons)) {
 result <- lapply(result, function(x) {
     x[["untreated"]]$group <- "untreated"
     x[["treated"]]$group <- "treated"
-    # x[["Moderate"]]$group <- "Moderate"
-    # x[["Mild"]]$group <- "Mild"
-    # x[["Asymptomatic"]]$group <- "Asymptomatic"
     return(x)
 })
 result2 <- lapply(result, function(x) {

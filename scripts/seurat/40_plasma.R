@@ -16,9 +16,9 @@ DimPlot(plasma, group.by = "orig.ident") + DimPlot(plasma, label = T)
 #-------------------------- Filter and re-cluster ------------------------------
 plasma_filter <- subset(plasma, idents = c(7, 10), invert = T)
 # back_run(do_harmony,out_name = "plasma_filter", job_name = "plasma_filter",
-#          seu_obj = plasma_filter, harmony_slot = "orig.ident", max.iter = 30 ,res = c(0.4, 0.6, 0.8, 1.0))
+#          seu_obj = plasma_filter, harmony_slot = "orig.ident", max.iter = 30, res = c(0.4, 0.6, 0.8, 1.0))
 
-# do_seurat(plasma_filter ,res = c(0.2, 0.3, 0.4, 0.5, 0.6))
+# do_seurat(plasma_filter, res = c(0.2, 0.3, 0.4, 0.5, 0.6))
 back_run(do_seurat, out_name = "plasma_filter", job_name = "plasma_filter",
          plasma_filter, res = c(0.2, 0.3, 0.5, 0.6, 0.4))
 DotPlot2(plasma_filter, marker_list = b_marker_list)

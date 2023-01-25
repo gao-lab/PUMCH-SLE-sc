@@ -448,8 +448,8 @@ plot_gsea <- function(seu_obj, group_by, focus, title = "please change title",
 # @from_begin: if do seurat analysi from beginning
 # @max.iter  : max iter loop number in Harmony
 # @scale_all : use all of the genes to scale(recommend False to save memory
-#              and speed up)m, but necessaery when using DoHeatmp()
-# @res       : resolution of the clustering ,can set a vector like c(0.5, 0.8, 1)
+#              and speed up)m, but necessaery when usingDoHeatmap()
+# @res       : resolution of the clustering, can set a vector like c(0.5, 0.8, 1)
 # @qc        : if calculate MT and ribosome gene proportion
 # @feature_exclude
 #            : genes excluded from HVGs so that their will not influence the clustering
@@ -612,7 +612,7 @@ do_seurat_back <- function(seu_obj, name, scale_all = F, res = 0.8, qc = F,
   # rm(seu_obj)
   job::job({
     source("/data/TLB/scripts/function_R/utils.R")
-    # name <- do_seurat(seu_obj,scale_all=scale_all ,res=res,qc=qc,
+    # name <- do_seurat(seu_obj,scale_all=scale_all, res=res,qc=qc,
     # feature_exclude=feature_exclude,reg =reg,vars.reg=vars.reg)
     assign(name, do_seurat(seu_obj, scale_all, res, qc, feature_exclude, reg, vars.reg))
     # job::export()
@@ -624,8 +624,8 @@ do_seurat_back <- function(seu_obj, name, scale_all = F, res = 0.8, qc = F,
 # Do seurat pipeline automatically
 # @seu_obj  : a seurat object
 # @scale_all: use all of the genes to scale(recommend False to save memory
-#             and speed up)m, but necessaery when using DoHeatmp()
-# @res      : resolution of the clustering ,can set a vector like c(0.5, 0.8, 1)
+#             and speed up)m, but necessaery when usingDoHeatmap()
+# @res      : resolution of the clustering, can set a vector like c(0.5, 0.8, 1)
 # @qc       : if calculate MT and ribosome gene proportion
 # @feature_exclude: genes excluded from HVGs so that their will not influence the clustering
 #             and UMAPauto remove IG TR RP MT gene family, only work when using Gene Symbol
